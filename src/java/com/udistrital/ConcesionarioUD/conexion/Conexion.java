@@ -16,7 +16,7 @@ public class Conexion {
 
     private static Connection connetion = null;
     private static final String rulbd = "jdbc:oracle:thin:@localhost:1521:XE";
-    private static final String user = "grupo_seleccion";
+    private static final String user = "ConcesioraioUD";
     private static final String password = "seleccionpw";
 
     public static Connection getConexion(){
@@ -44,5 +44,4 @@ public class Conexion {
             System.out.println(e.getMessage());
         }
     }
-
 }

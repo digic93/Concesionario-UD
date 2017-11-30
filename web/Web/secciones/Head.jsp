@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Grupo Seleccion S.A</title>
+        <title>Concecionario UD</title>
 
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Web/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Web/css/bootstrap-theme.min.css">
@@ -24,10 +24,10 @@
         <nav class="navbar-inverse navbar-default navbar-static-top">
             <div class="container">
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <%if (request.getRequestURI().equals("/Grupo_Seleccion_S.A/Web/LoginView.jsp")) {%>        
-                            <p class="navbar-text">Grupo Seleccion S.A</p>
+                    <%if (request.getRequestURI().equals("/Concesionario_UD/Web/LoginView.jsp")) {%>        
+                            <p class="navbar-text"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Concecionario UD</p>
                             <ul class="nav navbar-nav navbar-right">
-                                <li><a href="#"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login</a></li>
+                                <li><a href="#" onclick="modal();"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login</a></li>
                             </ul>
                     <%} else if (session.getAttribute("personal") == null) {%>        
                             <script>
@@ -44,7 +44,6 @@
                                 <li><a href="${pageContext.request.contextPath}/gestion/proceso">Gestion Procesos</a></li>
                                 <li><a href="#"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
                             </ul>
-
                     <%}
                     %>
                 </div>
@@ -52,11 +51,9 @@
         </nav> 
         <div class="container-fluid">
 	<div class="row">
-		<div class="col-md-1">
-		</div>
-		<div class="col-md-10">
+		<div class="col-md-10 col-md-offset-1">
                     <div class="starter text-center">
-                        <h1>Grupo Seleccion S.A</h1>
-                        <p class="lead">Especicalistas en la consecucion de talentos para <br>diferentes organizaciones, con 16 años de experiencia</p>
+                        <h1><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Concecionario UD</h1>
+                        <p class="lead">Especicalistas en la venta de Vehiculos nuevos.</p>
                     </div>
                     <hr>

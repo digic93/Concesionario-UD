@@ -12,7 +12,7 @@
             <form class="form-horizontal" method="POST" action="./login">
                 <fieldset>
                     <div class="modal-header">
-                        <h4 class="modal-title">Grupo Seleccion S.A <span class="label label-default">Login</span></h4>
+                        <h4 class="modal-title">Concecionario UD <span class="label label-default">Login</span></h4>
                     </div>
                     <div class="modal-body">
                         <%if(request.getAttribute("error") != null){%>
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>Ingresar</button>
+                        <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Ingresar</button>
                     </div>
                 </fieldset>
             </form>
@@ -44,7 +44,11 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('#loginModal').modal('show');
+        modal();
     });
+    
+    function modal(){
+        $('#loginModal').modal('show');
+    }
 </script>
 <jsp:include page="secciones/Foot.jsp" />

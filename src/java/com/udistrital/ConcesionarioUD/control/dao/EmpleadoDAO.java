@@ -6,7 +6,8 @@
 package com.udistrital.ConcesionarioUD.control.dao;
 
 import com.udistrital.ConcesionarioUD.conexion.Conexion;
-import com.udistrital.ConcesionarioUD.modelo.bean.Personal;
+import com.udistrital.ConcesionarioUD.modelo.bean.Empleado;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -17,15 +18,15 @@ import java.util.Calendar;
  */
 public class EmpleadoDAO extends AbstractDao {
 
-    public Personal login(String usuario, String password) {
-        Personal persona = null;
+    public Empleado login(String usuario, String password) {
+        Empleado empleado = null;
         String consulta = "SELECT * FROM PERSONAL where USUARIO = '" + usuario + "' and PASSWORD = '" + password + "'";
         try {
             this.connection = Conexion.getConexion();
             this.statement = connection.createStatement();
             this.resultSet = statement.executeQuery(consulta);
             if (resultSet.next()) {
-                persona = (Personal) this.getEntityByResultSet(resultSet);
+                empleado = (Empleado) this.getEntityByResultSet(resultSet);
             }
             statement.close();
         } catch (SQLException ex) {
@@ -35,8 +36,8 @@ public class EmpleadoDAO extends AbstractDao {
             Conexion.desconectar();
         }
 
-        if (validacionLogin(persona)) {
-            return persona;
+        if (validacionLogin(empleado)) {
+            return empleado;
         } else {
             return null;
         }
@@ -44,8 +45,8 @@ public class EmpleadoDAO extends AbstractDao {
 
     @Override
     public Object actualizar(Object object) {
-        Personal personal = (Personal)object;
-        try {
+        Empleado personal = (Empleado)object;
+        /*try {
             this.connection = Conexion.getConexion();
             this.statement = this.connection.createStatement();
             String insercion = "UPDATE PERSONAL SET NOMBRE = '" + personal.getNombre() + "', "
@@ -62,7 +63,8 @@ public class EmpleadoDAO extends AbstractDao {
             return false;
         } finally {
             Conexion.desconectar();
-        }
+        }*/
+        return null;
     }
 
     @Override
@@ -92,29 +94,29 @@ public class EmpleadoDAO extends AbstractDao {
 
     @Override
     public Object getEntityByResultSet(ResultSet resultSet) throws SQLException {
-        Personal persona = new Personal();
+        /*Personal persona = new Personal();
 
         persona.setId(resultSet.getInt("ID"));
         persona.setNombre(resultSet.getString("NOMBRE"));
         persona.setPassword(resultSet.getString("PASSWORD"));
         persona.setFechaUltimoIngreso(resultSet.getString("FECHA_ULTIMO_INGRESO"));
-        persona.setRolNombre(resultSet.getString("ROL_NOMBRE"));
+        persona.setRolNombre(resultSet.getString("ROL_NOMBRE"));*/
 
-        return persona;
+        return null;
     }
 
-    private boolean validacionLogin(Personal persona) {
-        if (persona == null) {
+    private boolean validacionLogin(Empleado empleado) {
+        /*if (empleado == null) {
             return false;
         }
-        if (persona.getRolNombre().equals("Analista")) {
+        if (empleado.getRolNombre().equals("Analista")) {
             Calendar calendar = Calendar.getInstance();
             String fecha = calendar.get(Calendar.DATE) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
-            persona.setFechaUltimoIngreso(fecha);
-            actualizar(persona);
+            empleado.setFechaUltimoIngreso(fecha);
+            actualizar(empleado);
             return true;
-        }
-        return false;
+        }*/
+        return true;
     }
 
 }

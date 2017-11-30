@@ -5,8 +5,8 @@
  */
 package com.udistrital.ConcesionarioUD.control.servlets;
 
-import com.udistrital.ConcesionarioUD.control.dao.PersonalDAO;
-import com.udistrital.ConcesionarioUD.modelo.bean.Personal;
+import com.udistrital.ConcesionarioUD.control.dao.EmpleadoDAO;
+import com.udistrital.ConcesionarioUD.modelo.bean.Empleado;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -49,18 +49,19 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Personal personal;
-        PersonalDAO personalDAO = new PersonalDAO();
+        Empleado empleado;
+        EmpleadoDAO empleadoDAO = new EmpleadoDAO();
         HttpSession sesion = request.getSession();
         
-        personal = personalDAO.login(request.getParameter("usuario"), request.getParameter("password"));
+        empleado = empleadoDAO.login(request.getParameter("usuario"), request.getParameter("password"));
         
-        if (personal != null) {
-            sesion.setAttribute("personal", personal);
-            response.sendRedirect("gestion/perfil");
+        if (empleado != null) {
+            sesion.setAttribute("personal", empleado);
+            
+            //response.sendRedirect("gestion/perfil");
         } else {
             request.setAttribute("error", "Usuario o Contraseña Incorrectos");
-            request.getRequestDispatcher("Web/Login.jsp").forward(request, response);
+            request.getRequestDispatcher("Web/LoginView.jsp").forward(request, response);
         }
     }
 

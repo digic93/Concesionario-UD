@@ -29,20 +29,20 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li><a href="#" onclick="modal();"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login</a></li>
                             </ul>
-                    <%} else if (session.getAttribute("personal") == null) {%>        
+                    <%} else if (session.getAttribute("empleado") == null) {%>        
                             <script>
                                 window.location.href = "${pageContext.request.contextPath}/login";
                             </script>   
                     <%} else {%>        
                         <p class="navbar-text">
                             <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                            ${sessionScope.personal.nombre}, Fecha: ${sessionScope.personal.fechaUltimoIngreso}
+                            ${sessionScope.empleado.nombre} ${sessionScope.empleado.apellido} , Fecha: ${sessionScope.personal.fechaUltimoIngreso}
                         </p>
                             <ul class="nav navbar-nav navbar-right">
-                                <li><a href="${pageContext.request.contextPath}/gestion/perfil">Gestion Perfil</a></li>
-                                <li><a href="${pageContext.request.contextPath}/gestion/programacion">Gestion Programacion</a></li>
-                                <li><a href="${pageContext.request.contextPath}/gestion/proceso">Gestion Procesos</a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
+                                <li><a href="${pageContext.request.contextPath}/cotizacion">Gestion Cotizacion</a></li>
+                                <li><a href="${pageContext.request.contextPath}/gestion/programacion">Gestion Financiacion</a></li>
+                                <li><a href="${pageContext.request.contextPath}/gestion/proceso">Gestion Facturacion</a></li>
+                                <li><a href="${pageContext.request.contextPath}/cerrarSesion"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
                             </ul>
                     <%}
                     %>
@@ -57,3 +57,5 @@
                         <p class="lead">Especicalistas en la venta de Vehiculos nuevos.</p>
                     </div>
                     <hr>
+                </div>
+        </div>

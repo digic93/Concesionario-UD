@@ -42,7 +42,7 @@ public class HistoricoAccionesDAO extends AbstractDao {
         String fecha = calendar.get(Calendar.DATE) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
         System.out.println(fecha);
         String insert = "INSERT INTO HISTORICOACCIONES (IDHISTORICO,IDEMPELADO,FECHAACCION,DESCRIPCIONMODIFICACION) VALUES (NULL,"+empleado.getIdEmpelado()+",to_date('"+fecha+"','DD/MM/YYYY'),'Inicio sesion en el sistema')";
-        System.out.println(insert);
+        //System.out.println(insert);
         try {
             this.connection = Conexion.getConexion();
             this.statement = connection.createStatement();

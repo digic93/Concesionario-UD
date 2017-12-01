@@ -57,12 +57,15 @@ public class Login extends HttpServlet {
         empleado = empleadoDAO.login(request.getParameter("usuario"), request.getParameter("password"));
         
         if (empleado != null) {
-            sesion.setAttribute("empleado", empleado);            
-            request.setAttribute("error", "Usuario y Contraseña Correctos");
+            sesion.setAttribute("empleado", empleado);  
+            
+            //request.setAttribute("error", "Usuario y Contraseña Correctos");
             actualizarAccion(empleado);
-            //request.getRequestDispatcher("/cotizacion").forward(request, response);
-            response.sendRedirect("Cotizacion");
+            System.out.println("Sesion iniciada: "+empleado.getNombre()+" "+empleado.getApellido());            
+            response.sendRedirect("cotizacion");
+            
         } else {
+            System.out.println("No se inicio sesión");
             request.setAttribute("error", "Usuario o Contraseña Incorrectos");
             request.getRequestDispatcher("Web/LoginView.jsp").forward(request, response);
         }

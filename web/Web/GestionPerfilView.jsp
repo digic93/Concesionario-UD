@@ -5,7 +5,7 @@
 --%>
 
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.udistrital.grupo_seleccion_sa.modelo.bean.Requerimiento"%>
+<%@page import="com.udistrital.ConcesionarioUD.modelo.bean.Requerimiento"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="secciones/Head.jsp" />
 <h2>Gestion de Perfiles</h2>

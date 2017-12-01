@@ -6,7 +6,8 @@
 package com.udistrital.ConcesionarioUD.control.dao;
 
 import com.udistrital.ConcesionarioUD.conexion.Conexion;
-import com.udistrital.ConcesionarioUD.modelo.bean.Personal;
+import com.udistrital.ConcesionarioUD.modelo.bean.Empleado;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -17,26 +18,27 @@ import java.util.Calendar;
  */
 public class EmpleadoDAO extends AbstractDao {
 
-    public Personal login(String usuario, String password) {
-        Personal persona = null;
-        String consulta = "SELECT * FROM PERSONAL where USUARIO = '" + usuario + "' and PASSWORD = '" + password + "'";
+    public Empleado login(String usuario, String password) {
+        Empleado empleado = null;
+        String consulta = "SELECT * FROM EMPLEADO where NOMBRE = '" + usuario + "' and PASSWORD = '" + password + "'";
         try {
             this.connection = Conexion.getConexion();
             this.statement = connection.createStatement();
             this.resultSet = statement.executeQuery(consulta);
-            if (resultSet.next()) {
-                persona = (Personal) this.getEntityByResultSet(resultSet);
+            
+            if (resultSet.next()){
+                empleado = (Empleado) this.getEntityByResultSet(resultSet);
             }
             statement.close();
         } catch (SQLException ex) {
-            System.out.println("No se pudo realizar la consulta");
+            System.out.println("No se pudo realizar la consulta: "+ex.getMessage());
             return null;
         } finally {
             Conexion.desconectar();
         }
 
-        if (validacionLogin(persona)) {
-            return persona;
+        if (validacionLogin(empleado)) {
+            return empleado;
         } else {
             return null;
         }
@@ -44,8 +46,8 @@ public class EmpleadoDAO extends AbstractDao {
 
     @Override
     public Object actualizar(Object object) {
-        Personal personal = (Personal)object;
-        try {
+        Empleado personal = (Empleado)object;
+        /*try {
             this.connection = Conexion.getConexion();
             this.statement = this.connection.createStatement();
             String insercion = "UPDATE PERSONAL SET NOMBRE = '" + personal.getNombre() + "', "
@@ -62,7 +64,8 @@ public class EmpleadoDAO extends AbstractDao {
             return false;
         } finally {
             Conexion.desconectar();
-        }
+        }*/
+        return null;
     }
 
     @Override
@@ -92,29 +95,33 @@ public class EmpleadoDAO extends AbstractDao {
 
     @Override
     public Object getEntityByResultSet(ResultSet resultSet) throws SQLException {
-        Personal persona = new Personal();
+        Empleado empleado = new Empleado();
 
-        persona.setId(resultSet.getInt("ID"));
-        persona.setNombre(resultSet.getString("NOMBRE"));
-        persona.setPassword(resultSet.getString("PASSWORD"));
-        persona.setFechaUltimoIngreso(resultSet.getString("FECHA_ULTIMO_INGRESO"));
-        persona.setRolNombre(resultSet.getString("ROL_NOMBRE"));
-
-        return persona;
+        empleado.setIdEmpelado(resultSet.getInt("IDEMPELADO"));        
+        empleado.setIdArea(resultSet.getInt("IDAREA"));
+        empleado.setIdDepto(resultSet.getInt("IDDEPTO"));
+        empleado.setNombre(resultSet.getString("NOMBRE"));
+        empleado.setApellido(resultSet.getString("APELLIDO"));
+        empleado.setCargo(resultSet.getString("CARGO"));
+        empleado.setSalario(resultSet.getString("SALARIO"));         
+        
+        //IDEMPELADO,IDAREA,IDDEPTO,NOMBRE,APELLIDO,CARGO,SALARIO,PASSWORD
+        return empleado;
     }
 
-    private boolean validacionLogin(Personal persona) {
-        if (persona == null) {
+    private boolean validacionLogin(Empleado empleado) {
+        if (empleado == null) {
             return false;
         }
-        if (persona.getRolNombre().equals("Analista")) {
+        if (empleado.getCargo().equals("vendedor") || empleado.getCargo().equals("Vendedor")) {
             Calendar calendar = Calendar.getInstance();
             String fecha = calendar.get(Calendar.DATE) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
-            persona.setFechaUltimoIngreso(fecha);
-            actualizar(persona);
+            
+            actualizar(empleado);
             return true;
         }
         return false;
+      
     }
 
 }

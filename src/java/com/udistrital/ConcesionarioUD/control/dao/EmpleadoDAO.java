@@ -20,17 +20,18 @@ public class EmpleadoDAO extends AbstractDao {
 
     public Empleado login(String usuario, String password) {
         Empleado empleado = null;
-        String consulta = "SELECT * FROM PERSONAL where USUARIO = '" + usuario + "' and PASSWORD = '" + password + "'";
+        String consulta = "SELECT * FROM EMPLEADO where NOMBRE = '" + usuario + "' and PASSWORD = '" + password + "'";
         try {
             this.connection = Conexion.getConexion();
             this.statement = connection.createStatement();
             this.resultSet = statement.executeQuery(consulta);
-            if (resultSet.next()) {
+            
+            if (resultSet.next()){
                 empleado = (Empleado) this.getEntityByResultSet(resultSet);
             }
             statement.close();
         } catch (SQLException ex) {
-            System.out.println("No se pudo realizar la consulta");
+            System.out.println("No se pudo realizar la consulta: "+ex.getMessage());
             return null;
         } finally {
             Conexion.desconectar();
@@ -94,29 +95,33 @@ public class EmpleadoDAO extends AbstractDao {
 
     @Override
     public Object getEntityByResultSet(ResultSet resultSet) throws SQLException {
-        /*Personal persona = new Personal();
+        Empleado empleado = new Empleado();
 
-        persona.setId(resultSet.getInt("ID"));
-        persona.setNombre(resultSet.getString("NOMBRE"));
-        persona.setPassword(resultSet.getString("PASSWORD"));
-        persona.setFechaUltimoIngreso(resultSet.getString("FECHA_ULTIMO_INGRESO"));
-        persona.setRolNombre(resultSet.getString("ROL_NOMBRE"));*/
-
-        return null;
+        empleado.setIdEmpelado(resultSet.getInt("IDEMPELADO"));        
+        empleado.setIdArea(resultSet.getInt("IDAREA"));
+        empleado.setIdDepto(resultSet.getInt("IDDEPTO"));
+        empleado.setNombre(resultSet.getString("NOMBRE"));
+        empleado.setApellido(resultSet.getString("APELLIDO"));
+        empleado.setCargo(resultSet.getString("CARGO"));
+        empleado.setSalario(resultSet.getString("SALARIO"));         
+        
+        //IDEMPELADO,IDAREA,IDDEPTO,NOMBRE,APELLIDO,CARGO,SALARIO,PASSWORD
+        return empleado;
     }
 
     private boolean validacionLogin(Empleado empleado) {
-        /*if (empleado == null) {
+        if (empleado == null) {
             return false;
         }
-        if (empleado.getRolNombre().equals("Analista")) {
+        if (empleado.getCargo().equals("vendedor") || empleado.getCargo().equals("Vendedor")) {
             Calendar calendar = Calendar.getInstance();
             String fecha = calendar.get(Calendar.DATE) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
-            empleado.setFechaUltimoIngreso(fecha);
+            
             actualizar(empleado);
             return true;
-        }*/
-        return true;
+        }
+        return false;
+      
     }
 
 }

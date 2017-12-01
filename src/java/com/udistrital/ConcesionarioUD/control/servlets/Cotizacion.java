@@ -5,23 +5,20 @@
  */
 package com.udistrital.ConcesionarioUD.control.servlets;
 
-import com.udistrital.ConcesionarioUD.control.dao.EmpleadoDAO;
-import com.udistrital.ConcesionarioUD.control.dao.HistoricoAccionesDAO;
-import com.udistrital.ConcesionarioUD.modelo.bean.Empleado;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Diego Castro
+ * @author Santiag
  */
-@WebServlet(name = "Login", urlPatterns = {"/login"})
-public class Login extends HttpServlet {
+@WebServlet(name = "Cotizacion", urlPatterns = {"/cotizacion"})
+public class Cotizacion extends HttpServlet {
 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -36,7 +33,9 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("Web/LoginView.jsp").forward(request, response);
+        request.getRequestDispatcher("Web/CotizacionView.jsp").forward(request, response);
+        
+        
     }
 
     /**
@@ -50,22 +49,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Empleado empleado;
-        EmpleadoDAO empleadoDAO = new EmpleadoDAO();
-        HttpSession sesion = request.getSession();
-        
-        empleado = empleadoDAO.login(request.getParameter("usuario"), request.getParameter("password"));
-        
-        if (empleado != null) {
-            sesion.setAttribute("empleado", empleado);            
-            request.setAttribute("error", "Usuario y Contraseña Correctos");
-            actualizarAccion(empleado);
-            //request.getRequestDispatcher("/cotizacion").forward(request, response);
-            response.sendRedirect("Cotizacion");
-        } else {
-            request.setAttribute("error", "Usuario o Contraseña Incorrectos");
-            request.getRequestDispatcher("Web/LoginView.jsp").forward(request, response);
-        }
+       
     }
 
     /**
@@ -77,10 +61,5 @@ public class Login extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    private void actualizarAccion(Empleado empleado) {
-       HistoricoAccionesDAO hAcciones = new HistoricoAccionesDAO();
-       hAcciones.accionLogin(empleado);
-    }
 
 }

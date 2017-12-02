@@ -61,7 +61,15 @@ public class buscarVehiculo extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        PrintWriter out = response.getWriter();
+        
+        String vin = request.getParameter("vin");
+        System.out.println("VIN: "+vin);
+        out.write("<h5></h5>");
         request.getRequestDispatcher("Web/CotizacionView.jsp").forward(request, response);
+        
+        
     }
 
     /**

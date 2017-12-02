@@ -69,7 +69,7 @@ public class Login extends HttpServlet {
                sesion.setAttribute("vehiculos", vehiculos);   
             }
             System.out.println("Sesion iniciada: "+empleado.getNombre()+" "+empleado.getApellido());            
-            response.sendRedirect("cotizacion");
+            response.sendRedirect("./cotizacion");
             
         } else {
             System.out.println("No se inicio sesión");

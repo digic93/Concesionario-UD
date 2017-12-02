@@ -88,7 +88,7 @@
         <!--<option value="Skoda">  -->
         </datalist>
     </div>
-    <button id="seleccionar" type="submit" class="btn btn-success btn-xs">Seleccionar</button>
+    <input id="seleccionar" type="button" class="btn btn-success btn-xs" value="Seleccionar"/>
 </form>
 
 
@@ -129,10 +129,11 @@ $(document).ready(function() {
           type: "POST",
           url: "${pageContext.request.contextPath}/buscarVehiculo",
           data: {
-            nombre: $("#vehiculo").val()           
+            vin: $("#vehiculo").val()           
           },
           success: function(result) {
-            alert('Se inicia la cotización');
+               console.log(result);
+               alert("Se inicia la cotizacion");
           },
           error: function(result) {
             alert('No se puede iniciar la cotización');

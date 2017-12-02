@@ -5,6 +5,8 @@
 --%>
 
 
+<%@page import="com.udistrital.ConcesionarioUD.modelo.bean.Auto"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="com.udistrital.ConcesionarioUD.modelo.bean.Cliente"%>
 <%@page import="com.udistrital.ConcesionarioUD.modelo.bean.Empleado"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -14,6 +16,8 @@
     HttpSession sesion = request.getSession();            
     Empleado e = (Empleado)sesion.getAttribute("empleado");
     Cliente c = (Cliente)sesion.getAttribute("cliente");
+    
+    ArrayList<Auto> vehiculos = (ArrayList)sesion.getAttribute("vehiculos");
     
 %>
             
@@ -70,16 +74,18 @@
 <strong><p>Seleccionar Vehículo</p></strong>
 
 
-<form role="form" action="" method="POST" class="registration-form">
+<form role="form" class="registration-form">
     <div class="form-group">
         <label class="sr-only" for="vehiculo">Seleccionar Vehículo</label>        
-        <input id="vehiculo" list="vehiculos" name="vehiculo" class="form-control">
+        <input id="vehiculo" placeholder="Seleccione VIN vehículo" list="vehiculos" name="vehiculo" class="form-control">
         <datalist id="vehiculos">  
-        <!-- Traer y generar dinamicamente todos los vehiculos existentes
-              Ej:
-                  <option value="Skoda">      
-        -->
-        <option value="Skoda">  
+
+        <% 
+            for (Auto vehiculo : vehiculos) {
+                out.print("<option value='" + vehiculo.getVin() + "'>");
+            }
+        %>
+        <!--<option value="Skoda">  -->
         </datalist>
     </div>
     <button id="seleccionar" type="submit" class="btn btn-success btn-xs">Seleccionar</button>

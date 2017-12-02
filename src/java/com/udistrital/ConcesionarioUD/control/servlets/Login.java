@@ -5,10 +5,12 @@
  */
 package com.udistrital.ConcesionarioUD.control.servlets;
 
+import com.udistrital.ConcesionarioUD.control.dao.AutoDAO;
 import com.udistrital.ConcesionarioUD.control.dao.EmpleadoDAO;
 import com.udistrital.ConcesionarioUD.control.dao.HistoricoAccionesDAO;
 import com.udistrital.ConcesionarioUD.modelo.bean.Empleado;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -51,6 +53,7 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Empleado empleado;
+        ArrayList vehiculos;
         EmpleadoDAO empleadoDAO = new EmpleadoDAO();
         HttpSession sesion = request.getSession();
         
@@ -61,6 +64,10 @@ public class Login extends HttpServlet {
             
             //request.setAttribute("error", "Usuario y Contraseña Correctos");
             actualizarAccion(empleado);
+            vehiculos = cargarAutos();
+            if(vehiculos != null){
+               sesion.setAttribute("vehiculos", vehiculos);   
+            }
             System.out.println("Sesion iniciada: "+empleado.getNombre()+" "+empleado.getApellido());            
             response.sendRedirect("cotizacion");
             
@@ -84,6 +91,14 @@ public class Login extends HttpServlet {
     private void actualizarAccion(Empleado empleado) {
        HistoricoAccionesDAO hAcciones = new HistoricoAccionesDAO();
        hAcciones.accionLogin(empleado);
+    }
+
+    private ArrayList cargarAutos() {
+        ArrayList vehiculos;
+        AutoDAO autoDAO = new AutoDAO();
+        vehiculos = autoDAO.cargar();
+        return vehiculos;
+        
     }
 
 }

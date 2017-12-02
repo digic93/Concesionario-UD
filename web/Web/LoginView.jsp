@@ -4,6 +4,7 @@
     Author     : Diego Castro
 --%>
 
+<%@page import="com.udistrital.ConcesionarioUD.modelo.bean.Empleado"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="secciones/Head.jsp" />
 <div id="loginModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="Login">
@@ -40,6 +41,8 @@
                 </fieldset>
             </form>
         </div>
+                        
+
     </div>
 </div>
 <script>
@@ -48,7 +51,9 @@
     });
     
     function modal(){
+        
         $('#loginModal').modal('show');
+        
     }
 </script>
 <jsp:include page="secciones/Foot.jsp" />

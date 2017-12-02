@@ -6,16 +6,18 @@
 package com.udistrital.ConcesionarioUD.control.dao;
 
 import com.udistrital.ConcesionarioUD.conexion.Conexion;
-import com.udistrital.ConcesionarioUD.modelo.bean.Empleado;
+import com.udistrital.ConcesionarioUD.modelo.bean.Auto;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
+import java.util.ArrayList;
 
 /**
  *
- * @author Diego Castro
+ * @author Santiag
  */
-public class HistoricoAccionesDAO extends AbstractDao {
+public class AutoDAO extends AbstractDao{
+    
+    
 
     @Override
     public Object actualizar(Object object) {
@@ -34,27 +36,31 @@ public class HistoricoAccionesDAO extends AbstractDao {
 
     @Override
     public Object getEntityByResultSet(ResultSet resultSet) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Auto auto = new Auto();
+        auto.setVin(resultSet.getString("VIN"));
+        return auto;
     }
 
-    public void accionLogin(Empleado empleado) {
-        Calendar calendar = Calendar.getInstance();
-        String fecha = calendar.get(Calendar.DATE) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
-        System.out.println(fecha);
-        String insert = "INSERT INTO HISTORICOACCIONES (IDHISTORICO,IDEMPELADO,FECHAACCION,DESCRIPCIONMODIFICACION) VALUES (NULL,"+empleado.getIdEmpelado()+",to_date('"+fecha+"','DD/MM/YYYY'),'Inicio sesion en el sistema')";
-        //System.out.println(insert);
+    public ArrayList cargar() {
+        ArrayList vehiculos = new ArrayList();
+        String consulta = "SELECT * FROM AUTO";
         try {
             this.connection = Conexion.getConexion();
             this.statement = connection.createStatement();
-            this.statement.executeUpdate(insert);
-
+            this.resultSet = statement.executeQuery(consulta);
+            
+            while(resultSet.next()){
+                vehiculos.add((Auto) this.getEntityByResultSet(resultSet));
+            }
             statement.close();
         } catch (SQLException ex) {
             System.out.println("No se pudo realizar la consulta: "+ex.getMessage());
-            
+            return null;
         } finally {
             Conexion.desconectar();
         }
-    }
 
+        return vehiculos;
+    }
+    
 }

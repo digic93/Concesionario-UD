@@ -28,7 +28,7 @@
                     <p id="horaSistema" class="navbar-text"></p>
                     <%if (request.getRequestURI().equals("/Concesionario_UD/Web/LoginView.jsp")) {%>        
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#" onclick="modal();"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login</a></li>
+                        <li><a href="${pageContext.request.contextPath}/cerrarSesion" onclick="modal();"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login</a></li>
                     </ul>
                     <%} else if (session.getAttribute("empleado") == null) {%>        
                     <script>
@@ -53,7 +53,7 @@
                                 <li><a href="${pageContext.request.contextPath}/venta/abonarPago">Abonar Pago</a></li>
                             </ul>
                         </li>
-                        <li><a href="#"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
+                        <li><a href="${pageContext.request.contextPath}/cerrarSesion"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
                     </ul>
                     <%}
                     %>

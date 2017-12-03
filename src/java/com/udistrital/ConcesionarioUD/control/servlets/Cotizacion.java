@@ -5,7 +5,10 @@
  */
 package com.udistrital.ConcesionarioUD.control.servlets;
 
+import com.udistrital.ConcesionarioUD.control.dao.CotizacionDAO;
 import com.udistrital.ConcesionarioUD.control.dao.EmpleadoDAO;
+import com.udistrital.ConcesionarioUD.control.dao.ParteAutoDAO;
+import com.udistrital.ConcesionarioUD.control.dao.ProcesoDAO;
 import com.udistrital.ConcesionarioUD.modelo.bean.Empleado;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -50,8 +54,45 @@ public class Cotizacion extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Empleado empleado;
+        HttpSession sesion = request.getSession();
+        PrintWriter out = response.getWriter();
+        String[] partes = request.getParameterValues("partes[]");
+
+        String cedula = request.getParameter("cedula");
+        String vin = request.getParameter("vin");
+        Empleado empleado = (Empleado)sesion.getAttribute("empleado");
+        
+        CotizacionDAO cotizacionDAO = new CotizacionDAO();
         EmpleadoDAO empleadoDAO = new EmpleadoDAO();
+        ProcesoDAO procesoDAO = new ProcesoDAO();
+        ParteAutoDAO parteAutoDAO = new ParteAutoDAO();
+        
+        long totalPartes = (Long)cotizacionDAO.obtenerTotalPartes(partes);
+        long totalAuto = (Long)cotizacionDAO.obtenerTotalAuto(vin);
+        long total = totalPartes + totalAuto;
+        
+        
+        out.write("<h4>Total Costo Vehiculo: $ "+totalAuto+" COP Total Costo Partes: $ "+totalPartes+" COP</h4>");
+        out.write("<h2>Total Cotizacion: $"+total+" COP</h2>");
+        out.write("<br><br>");
+        out.write("<input id=\"pdf\" type=\"button\" class=\"btn btn-success btn-xs\" value=\"Generar PDF\"/>");        
+        out.write("<br><br>");
+        out.write("<br><br>");
+        
+        
+        
+        //int respuesta = cotizacionDAO.guardarCotizacion(cedula,empleado.getIdEmpelado(),total);      
+             
+        
+        /*if(respuesta==1){//cotizacion registrada -> se guarda el proceso se guarda precios
+            int r = parteAutoDAO.guardar(partes,vin);
+        }else{// fallo en cotizacion
+           out.write("n");
+        }*/
+        
+        
+        
+        
     }
 
     /**

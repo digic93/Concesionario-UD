@@ -5,6 +5,7 @@
 --%>
 
 
+<%@page import="com.udistrital.ConcesionarioUD.modelo.bean.TipoCaracteristica"%>
 <%@page import="com.udistrital.ConcesionarioUD.modelo.bean.Auto"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.udistrital.ConcesionarioUD.modelo.bean.Cliente"%>
@@ -90,13 +91,83 @@
     </div>
     <input id="seleccionar" type="button" class="btn btn-success btn-xs" value="Seleccionar"/>
 </form>
+    
+        
+<center>
+    <strong><p>Datos Vehículo</p></strong>
 
+    <table id="table" class="table" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Tipo Caracteristica</th>
+                <th>Nombre</th>
+                <th>Descripcion Caracteristica </th>        
+            </tr>
+        </thead>
+        <tbody id="bodyTableCaracteristica">
+            
+            
+            
+
+            <!--Imprimir los datos del cliente-->
+        </tbody>
+
+    </table>
+</center> 
+        <center>
+            <br>
+            <br>
+            <input id="buscarParte" type="button" class="btn btn-success btn-xs" value="Consultar Partes"/>
+            <br>
+            <br>
+        </center>    
+        
+        
+<center>
+    <strong><p>Datos Partes</p></strong>
+    
+    <form role="form" class="registration-form">
+
+        <table id="table" class="table" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    
+                    <th>Número</th>
+                    <th>Tipo Parte</th>
+                    <th>Nombre Parte</th>
+                    <th>Precio </th>                    
+                    <th>Adicionar a la cotización </th> 
+                    
+                </tr>
+            </thead>
+
+            <tbody id="bodyTablePartes">
+     
+
+
+
+            </tbody>
+
+        </table>
+        <input id="cotizar" type="button" class="btn btn-success btn-xs" value="Generar Cotización"/>
+    </form>
+</center>   
+        
+        <center id="total">
+                        
+        </center>
+        
+        <br>
+        <br>
+        <br>
 
 <script>
 
 $(document).ready(function() { 
 
-    $("#buscar").click(function() {  
+    $("#buscar").click(function() { 
+        
+
         
          $.ajax({
            type: "POST",
@@ -121,7 +192,7 @@ $(document).ready(function() {
              alert('Error');
            }
          });
-         $("#cedula").val("");
+         //$("#cedula").val("");
      }); 
 
     $("#seleccionar").click(function() {        
@@ -133,13 +204,75 @@ $(document).ready(function() {
           },
           success: function(result) {
                console.log(result);
-               alert("Se inicia la cotizacion");
+               if(result=='n'){
+                   alert("No se encontro el vehículo");
+               }else{
+                   alert("Se encontro el vehículo, se describen caracteristicas");
+                   $("#bodyTableCaracteristica").html(result);
+               }    
+               
           },
           error: function(result) {
             alert('No se puede iniciar la cotización');
           }
         });
-    });    
+    }); 
+    
+    $("#buscarParte").click(function() {        
+        $.ajax({
+          type: "POST",
+          url: "${pageContext.request.contextPath}/buscarParte",
+          
+          success: function(result) {
+               console.log(result);
+               if(result=='n'){
+                   alert("No se encontro partes");
+               }else{
+                   $("#bodyTablePartes").html(result);
+               }    
+               
+          },
+          error: function(result) {
+            alert('No se puede iniciar la cotización');
+          }
+        });
+    });
+    
+    $("#cotizar").click(function() {     
+    
+        var checkbox_value = [];
+        $(":checkbox").each(function () {
+            var ischecked = $(this).is(":checked");
+            if (ischecked) {
+                checkbox_value.push($(this).val());
+            }
+        });
+        //alert(checkbox_value);
+        
+        $.ajax({
+          type: "POST",
+          url: "${pageContext.request.contextPath}/cotizacion",
+          data: {
+            vin: $("#vehiculo").val(),
+            cedula: $("#cedula").val(),
+            partes: checkbox_value
+    
+          },
+          success: function(result) {
+               console.log(result);
+               if(result=='n'){
+                   alert("No se completo la cotizacion");
+               }else{
+                   alert("Se ha realizado la cotización");
+                   $("#total").html(result);
+               }    
+               
+          },
+          error: function(result) {
+            alert('No se puede realizar la cotización');
+          }
+        });
+    }); 
 
 
 

@@ -5,18 +5,13 @@
  */
 package com.udistrital.ConcesionarioUD.control.servlets;
 
-import com.udistrital.ConcesionarioUD.control.dao.AutoCaracteristicaDAO;
-import com.udistrital.ConcesionarioUD.control.dao.AutoDAO;
-import com.udistrital.ConcesionarioUD.control.dao.CaracteristicaDAO;
-import com.udistrital.ConcesionarioUD.control.dao.TipoCaracteristicaDAO;
-
-import com.udistrital.ConcesionarioUD.modelo.bean.AutoCaracteristica;
-import com.udistrital.ConcesionarioUD.modelo.bean.Caracteristica;
-import com.udistrital.ConcesionarioUD.modelo.bean.TipoCaracteristica;
+import com.udistrital.ConcesionarioUD.control.dao.HistoricoPrecioParteDAO;
+import com.udistrital.ConcesionarioUD.control.dao.ParteDAO;
+import com.udistrital.ConcesionarioUD.modelo.bean.HistoricoPrecioParte;
+import com.udistrital.ConcesionarioUD.modelo.bean.Parte;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Santiag
  */
-@WebServlet(name = "buscarVehiculo", urlPatterns = {"/buscarVehiculo"})
-public class buscarVehiculo extends HttpServlet {
+@WebServlet(name = "buscarParte", urlPatterns = {"/buscarParte"})
+public class buscarParte extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,7 +37,6 @@ public class buscarVehiculo extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher("Web/CotizacionView.jsp").forward(request, response);
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -71,41 +65,49 @@ public class buscarVehiculo extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ArrayList <AutoCaracteristica> autoCaracteristica;
-        ArrayList <TipoCaracteristica> tipoCaracteristicas;
-        ArrayList <Caracteristica> caracteristicas;
-        AutoCaracteristicaDAO autoCaracteristicasDAO = new AutoCaracteristicaDAO();
-        TipoCaracteristicaDAO tipoCDAO = new TipoCaracteristicaDAO();
-        CaracteristicaDAO caracteristicaDAO = new CaracteristicaDAO();
+        //System.out.println("Buscando partes...");
+        ArrayList <Parte> partes;
+        ArrayList <HistoricoPrecioParte> precios;
+        ParteDAO parteDAO = new ParteDAO();
+        HistoricoPrecioParteDAO preciosDAO = new HistoricoPrecioParteDAO();
         
         PrintWriter out = response.getWriter();
-        tipoCaracteristicas = tipoCDAO.cargarCaracteristicas();
         
+        partes = parteDAO.consultarPartes();
+        precios = preciosDAO.obtenerPrecios();
         
-        autoCaracteristica = autoCaracteristicasDAO.consultarIDforVIN(request.getParameter("vin"));        
-        caracteristicas = caracteristicaDAO.obtenerCaracteristicas(request.getParameter("vin"));
-       
-       
-        if(caracteristicas!=null){
-            
-            for (int i = 0; i<tipoCaracteristicas.size(); i++) {
+        if(partes != null){
+            int i = 0;
+            for (Parte parte : partes) {
+                i++;
                 out.write("<tr>");
-                    //System.out.println(tipoCaracteristica.getIdTipoCaracteristica()+" - "+tipoCaracteristica.getNombre());
-                    out.write("<th>"+tipoCaracteristicas.get(i).getIdTipoCaracteristica()+"</th>");
-                    out.write("<th>"+tipoCaracteristicas.get(i).getNombre()+"</th>");
-                    out.write("<th>"+caracteristicas.get(i).getNombre()+"</th>");
-                out.write("</tr>");
-            }
+                    out.write("<th>("+i+")</th>");//numero
+                switch (parte.getIdTipoParte()) {
+                    case 1:
+                        out.write("<th>Tramite</th>");//tipo caracteristica
+                        break;
+                    case 2:
+                        out.write("<th>Lujo</th>");//tipo caracteristica
+                        break;
+                    default:
+                        out.write("<th>Complementaria sin costo</th>");//tipo caracteristica
+                        break;
+                }                          
+                    
+                    out.write("<th>"+parte.getNombre()+"</th>");//nombre
+                    for (HistoricoPrecioParte precio : precios) {
+                        
+                        if(precio.getIdParte()==parte.getIdParte()){
+                            out.write("<th>"+precio.getPrecioParte()+"</th>");//precio
+                        }
+                    }
+                    out.write("<th><center><input type='checkbox' value='"+parte.getIdParte()+"'></center></th>");//check
 
-            
+                out.write("</tr>");                
+            }
         }else{
-            out.write("n");
-            System.out.println("No se encontro el vehiculo");
+             out.write("n");
         }
-        
-        
-        
-//        request.getRequestDispatcher("Web/CotizacionView.jsp").forward(request, response);     
         
     }
 

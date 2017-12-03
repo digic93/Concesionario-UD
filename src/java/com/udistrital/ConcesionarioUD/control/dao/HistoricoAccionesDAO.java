@@ -46,7 +46,8 @@ public class HistoricoAccionesDAO extends AbstractDao {
         try {
             this.connection = Conexion.getConexion();
             this.statement = connection.createStatement();
-            this.statement.executeUpdate(insert);
+            int r = this.statement.executeUpdate(insert);
+            System.out.println("Respuesta: "+r);
 
             statement.close();
         } catch (SQLException ex) {

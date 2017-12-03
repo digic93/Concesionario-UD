@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="secciones/Head.jsp" />
 <jsp:include page="Cotizacion/BuscsarCotizacion.jsp" />
+<jsp:include page="Cotizacion/Cotizacion.jsp" />
 <script>
     $(document).ready(function () {
         ModoBusquedaCotizacion = "cotizacionPorCCCliente";

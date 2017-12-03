@@ -65,7 +65,7 @@
                 <div class="col-md-10 col-md-offset-1">
                     <div class="starter text-center">
                         <h1><span class="glyphicon glyphicon-road" aria-hidden="true"></span> Concecionario UD</h1>
-                        <%if (session.getAttribute("personal") == null) {%>
+                        <%if (session.getAttribute("empleado") == null) {%>
                         <p class="lead">Especicalistas en la venta de Vehiculos nuevos.</p>
                         <%}%>
                     </div>

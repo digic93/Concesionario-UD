@@ -6,8 +6,12 @@
 package com.udistrital.ConcesionarioUD.control.servlets.venta;
 
 import com.google.gson.Gson;
+import com.udistrital.ConcesionarioUD.control.dao.CotizacionDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.WebInitParam;
@@ -50,7 +54,6 @@ public class BuquedaVentas extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -66,7 +69,7 @@ public class BuquedaVentas extends HttpServlet {
             case "cotizacionPorCCCliente":
                 String result = cotizacionPorCCCliente(request.getParameter("valor"));
                 
-                //response.setContentType("application/json");
+                response.setContentType("application/json");
                 //new Gson().toJson()
                 response.getWriter().write(result);
                 break;
@@ -98,40 +101,44 @@ public class BuquedaVentas extends HttpServlet {
         return "Short description";
     }// </editor-fold>
     
-    private String cotizacionPorCCCliente(String parameter) {
-        return "{\"result\":[{" +
-            "\"clietne\": {" +
-            "\"nombre\": \"Diego\"," +
-            "\"apellido\": \"Castro Lopez\"" +
-            "}," +
-            "\"cotizacion\": {" +
-            "\"idCotizacion\": 1," +
-            "\"valor\": 72000000," +
-            "\"fechaExpedicion\": \"2000/12/30\"," +
-            "\"estado\": \"vigente\"" +
-            "}," +
-            "\"auto\": {" +
-            "\"vin\": \"abcdefg\"," +
-            "\"Marcar\": \"Mazda\"," +
-            "\"Linea\": \"BT-50\"" +
-            "}" +
-            "}," +
-            "{" +
-            "\"clietne\": {" +
-            "\"nombre\": \"Diego\"," +
-            "\"apellido\": \"Castro Lopez\"" +
-            "}," +
-            "\"cotizacion\": {" +
-            "\"idCotizacion\": 1," +
-            "\"fechaExpedicion\": \"2000/12/30\"," +
-            "\"valor\": 32000000," +
-            "\"estado\": \"vigente\"" +
-            "}," +
-            "\"auto\": {" +
-            "\"vin\": \"acd1231233\"," +
-            "\"Marcar\": \"Hiunday\"," +
-            "\"Linea\": \"i10\"" +
-        "}}]}";
+    private String cotizacionPorCCCliente(String cedulaCliente) {
+        
+        CotizacionDAO cotizacionDAO = new CotizacionDAO();
+        ArrayList<Map<String, Object>> cotizaciones = cotizacionDAO.buscarPorCedulaCliente(cedulaCliente);
+        return new Gson().toJson(cotizaciones);
+//                "{\"result\":[{" +
+//            "\"clietne\": {" +
+//            "\"nombre\": \"Diego\"," +
+//            "\"apellido\": \"Castro Lopez\"" +
+//            "}," +
+//            "\"cotizacion\": {" +
+//            "\"idCotizacion\": 1," +
+//            "\"valor\": 72000000," +
+//            "\"fechaExpedicion\": \"2000/12/30\"," +
+//            "\"estado\": \"vigente\"" +
+//            "}," +
+//            "\"auto\": {" +
+//            "\"vin\": \"abcdefg\"," +
+//            "\"Marcar\": \"Mazda\"," +
+//            "\"Linea\": \"BT-50\"" +
+//            "}" +
+//            "}," +
+//            "{" +
+//            "\"clietne\": {" +
+//            "\"nombre\": \"Diego\"," +
+//            "\"apellido\": \"Castro Lopez\"" +
+//            "}," +
+//            "\"cotizacion\": {" +
+//            "\"idCotizacion\": 1," +
+//            "\"fechaExpedicion\": \"2000/12/30\"," +
+//            "\"valor\": 32000000," +
+//            "\"estado\": \"vigente\"" +
+//            "}," +
+//            "\"auto\": {" +
+//            "\"vin\": \"acd1231233\"," +
+//            "\"Marcar\": \"Hiunday\"," +
+//            "\"Linea\": \"i10\"" +
+//        "}}]}";
     }
 
 }

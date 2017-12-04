@@ -65,9 +65,18 @@ public class BuquedaVentas extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String result;
         switch(request.getParameter("busqueda")){
             case "cotizacionPorCCCliente":
-                String result = cotizacionPorCCCliente(request.getParameter("valor"));
+                result = cotizacionPorCCCliente(request.getParameter("valor"));
+                
+                response.setContentType("application/json");
+                //new Gson().toJson()
+                response.getWriter().write(result);
+                break;
+            
+            case "cotizacionAprobarCreditoPorCCCliente":
+                result = cotizacionAprobarCreditoPorCCCliente(request.getParameter("valor"));
                 
                 response.setContentType("application/json");
                 //new Gson().toJson()
@@ -102,43 +111,15 @@ public class BuquedaVentas extends HttpServlet {
     }// </editor-fold>
     
     private String cotizacionPorCCCliente(String cedulaCliente) {
-        
         CotizacionDAO cotizacionDAO = new CotizacionDAO();
         ArrayList<Map<String, Object>> cotizaciones = cotizacionDAO.buscarPorCedulaCliente(cedulaCliente);
         return new Gson().toJson(cotizaciones);
-//                "{\"result\":[{" +
-//            "\"clietne\": {" +
-//            "\"nombre\": \"Diego\"," +
-//            "\"apellido\": \"Castro Lopez\"" +
-//            "}," +
-//            "\"cotizacion\": {" +
-//            "\"idCotizacion\": 1," +
-//            "\"valor\": 72000000," +
-//            "\"fechaExpedicion\": \"2000/12/30\"," +
-//            "\"estado\": \"vigente\"" +
-//            "}," +
-//            "\"auto\": {" +
-//            "\"vin\": \"abcdefg\"," +
-//            "\"Marcar\": \"Mazda\"," +
-//            "\"Linea\": \"BT-50\"" +
-//            "}" +
-//            "}," +
-//            "{" +
-//            "\"clietne\": {" +
-//            "\"nombre\": \"Diego\"," +
-//            "\"apellido\": \"Castro Lopez\"" +
-//            "}," +
-//            "\"cotizacion\": {" +
-//            "\"idCotizacion\": 1," +
-//            "\"fechaExpedicion\": \"2000/12/30\"," +
-//            "\"valor\": 32000000," +
-//            "\"estado\": \"vigente\"" +
-//            "}," +
-//            "\"auto\": {" +
-//            "\"vin\": \"acd1231233\"," +
-//            "\"Marcar\": \"Hiunday\"," +
-//            "\"Linea\": \"i10\"" +
-//        "}}]}";
+    }
+
+    private String cotizacionAprobarCreditoPorCCCliente(String cedulaCliente) {
+        CotizacionDAO cotizacionDAO = new CotizacionDAO();
+        ArrayList<Map<String, Object>> cotizaciones = cotizacionDAO.cotizacionAprobarCreditoPorCCCliente(cedulaCliente);
+        return new Gson().toJson(cotizaciones);
     }
 
 }

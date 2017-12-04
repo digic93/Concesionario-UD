@@ -47,6 +47,7 @@
     </div>
 </div>
 <script>
+    var clickOnCotizacion;
     var ModoBusquedaCotizacion;
     
     function buscar() {
@@ -78,10 +79,10 @@
             </tr>"
     }    
     
-    function verCotizacion(idCotizacion){
-        $('#collapseBuscarCotizacion').collapse('toggle')
+    function verCotizacion(btncotiazacion){
+        var idCotizacion = $(btncotiazacion).data("idcotizacion"); 
         clickOnCotizacion(idCotizacion);
+        $('#collapseBuscarCotizacion').collapse('toggle');
     }
     
-    function clickOnCotizacion(idCotizacion){}
 </script>

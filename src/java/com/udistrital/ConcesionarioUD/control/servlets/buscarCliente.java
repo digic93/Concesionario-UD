@@ -88,7 +88,7 @@ public class buscarCliente extends HttpServlet {
             contactos = contactoDAO.obtenerContactos(request.getParameter("cedula"));
             System.out.println("Se encontro el cliente");
             out.write("<tr>");
-            out.write("<th>"+cliente.getNombre()+" "+cliente.getApellido()+"</th>");
+            out.write("<th id='nombreCliente'>"+cliente.getNombre()+" "+cliente.getApellido()+"</th>");
             out.write("<th>"+cliente.getCedula()+"</th>");
             out.write("<th>");
             if(contactos != null){

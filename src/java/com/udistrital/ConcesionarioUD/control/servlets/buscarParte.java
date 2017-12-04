@@ -90,7 +90,7 @@ public class buscarParte extends HttpServlet {
                         out.write("<th>Lujo</th>");//tipo caracteristica
                         break;
                     default:
-                        out.write("<th>Complementaria sin costo</th>");//tipo caracteristica
+                        out.write("<th>Sin costo</th>");//tipo caracteristica
                         break;
                 }                          
                     
@@ -98,7 +98,7 @@ public class buscarParte extends HttpServlet {
                     for (HistoricoPrecioParte precio : precios) {
                         
                         if(precio.getIdParte()==parte.getIdParte()){
-                            out.write("<th>"+precio.getPrecioParte()+"</th>");//precio
+                            out.write("<th>COP $"+precio.getPrecioParte()+"</th>");//precio
                         }
                     }
                     out.write("<th><center><input type='checkbox' value='"+parte.getIdParte()+"'></center></th>");//check

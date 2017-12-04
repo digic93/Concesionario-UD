@@ -71,24 +71,31 @@ public class Cotizacion extends HttpServlet {
         long totalAuto = (Long)cotizacionDAO.obtenerTotalAuto(vin);
         long total = totalPartes + totalAuto;
         
-        
-        out.write("<h4>Total Costo Vehiculo: $ "+totalAuto+" COP Total Costo Partes: $ "+totalPartes+" COP</h4>");
-        out.write("<h2>Total Cotizacion: $"+total+" COP</h2>");
-        out.write("<br><br>");
-        out.write("<input id=\"pdf\" type=\"button\" class=\"btn btn-success btn-xs\" value=\"Generar PDF\"/>");        
-        out.write("<br><br>");
-        out.write("<br><br>");
-        
-        
-        
-        //int respuesta = cotizacionDAO.guardarCotizacion(cedula,empleado.getIdEmpelado(),total);      
+        int respuesta = cotizacionDAO.guardarCotizacion(cedula,empleado.getIdEmpelado(),total);      
              
         
-        /*if(respuesta==1){//cotizacion registrada -> se guarda el proceso se guarda precios
-            int r = parteAutoDAO.guardar(partes,vin);
-        }else{// fallo en cotizacion
+        if(respuesta==1){//cotizacion registrada -> se guarda el proceso se guarda precios
+            int numCotizacion = cotizacionDAO.obtenerCotizacion();
+            respuesta = parteAutoDAO.guardar(partes,vin);
+            if(respuesta == 1){
+                respuesta = procesoDAO.guardar(empleado.getIdEmpelado(),numCotizacion);
+                if(respuesta == 1){
+                    out.write("<h4 id=\"costoVehiculo\">Total Costo Vehiculo: COP $ "+totalAuto+"  Total Costo Partes: $ "+totalPartes+" COP</h4>");
+                    out.write("<h2 id=\"totalCotizacion\">Total Cotizacion: COP $"+total+" </h2>");
+                    out.write("<br><br>");
+                    //out.write("<input id=\"pdf\" type=\"button\" class=\"btn btn-success btn-xs\" value=\"Generar PDF\"/>");        
+                    out.write("<br><br>");
+                                      
+                }else{//fallo en guardar proceso
+                    out.write("n");
+                }   
+            }else{//fallo en guardar parte Auto
+                out.write("n");
+            }
+            
+        }else{// fallo en guardar cotizacion
            out.write("n");
-        }*/
+        }
         
         
         

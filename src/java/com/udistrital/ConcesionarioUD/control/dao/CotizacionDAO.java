@@ -264,4 +264,25 @@ public class CotizacionDAO extends AbstractDao {
         return cotizaciones;
     }
 
+    public int obtenerCotizacion() {
+        int r = 0;
+        
+        String select = "SELECT IDCOTIZACION FROM COTIZACION WHERE ROWNUM=1 ORDER BY IDCOTIZACION DESC";        
+        System.out.println(select);
+        try {
+            this.connection = Conexion.getConexion();
+            this.statement = connection.createStatement();
+            this.resultSet = this.statement.executeQuery(select);
+            if(resultSet.next()){
+                r = resultSet.getInt("IDCOTIZACION");
+            }
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("No se pudo realizar el insert: "+ex.getMessage());
+
+        } finally {
+            Conexion.desconectar();
+        }
+        return r;
+    }
 }

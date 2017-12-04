@@ -5,8 +5,12 @@
  */
 package com.udistrital.ConcesionarioUD.control.servlets.venta;
 
+import com.google.gson.Gson;
+import com.udistrital.ConcesionarioUD.control.dao.CotizacionDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.WebInitParam;
@@ -19,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Dell
  */
 @WebServlet(name = "VentaCotizacion", urlPatterns = {"/venta/cotizacion"}, initParams = {
-    @WebInitParam(name = "idcotizacion", value = "0")})
+    @WebInitParam(name = "idcotizacion", value = "")})
 public class Cotizacion extends HttpServlet {
 
     /**
@@ -39,7 +43,7 @@ public class Cotizacion extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Cotizacion</title>");            
+            out.println("<title>Servlet Cotizacion</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Cotizacion at " + request.getContextPath() + "</h1>");
@@ -59,7 +63,21 @@ public class Cotizacion extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int idCaracteristica = 0;
+        CotizacionDAO cotizacionDAO = new CotizacionDAO();
+        try {
+            idCaracteristica = Integer.parseInt(request.getParameter("idcotizacion"));
+        } catch (Exception e) {
+            idCaracteristica = 0;
+        }
+
+        if (idCaracteristica == 0) {
+            return;
+        }
+
+        Map<String, Object> cotizaciones = cotizacionDAO.getAllCotizacionById(idCaracteristica);
+        response.setContentType("application/json");
+        response.getWriter().write(new Gson().toJson(cotizaciones));
     }
 
     /**

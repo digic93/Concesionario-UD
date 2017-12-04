@@ -5,20 +5,19 @@
  */
 package com.udistrital.ConcesionarioUD.control.dao;
 
-import com.sun.faces.util.CollectionsUtils;
 import com.udistrital.ConcesionarioUD.conexion.Conexion;
 import com.udistrital.ConcesionarioUD.control.servlets.venta.ConsultasVenta;
 import com.udistrital.ConcesionarioUD.modelo.bean.Caracteristica;
 import com.udistrital.ConcesionarioUD.modelo.bean.Cliente;
 import com.udistrital.ConcesionarioUD.modelo.bean.Cotizacion;
 import com.udistrital.ConcesionarioUD.modelo.bean.Empleado;
+import com.udistrital.ConcesionarioUD.modelo.bean.TipoCaracteristica;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 
 /**
  *
@@ -46,11 +45,11 @@ public class CotizacionDAO extends AbstractDao {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public int guardarCotizacion(String cedula, int idEmpelado,long total) {
+    public int guardarCotizacion(String cedula, int idEmpelado, long total) {
         Calendar calendar = Calendar.getInstance();
-        String fecha = calendar.get(Calendar.DATE) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
+        String fecha = calendar.get(Calendar.DATE) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
         int r = 0;
-        String insert = "INSERT INTO COTIZACION (IDCOTIZACION,CEDULA,IDEMPELADO,FECHAEXPEDICION,TOTAL) VALUES (NULL,"+Integer.parseInt(cedula)+","+idEmpelado+",to_date('"+fecha+"','DD/MM/YYYY'),"+total+")";
+        String insert = "INSERT INTO COTIZACION (IDCOTIZACION,CEDULA,IDEMPELADO,FECHAEXPEDICION,TOTAL) VALUES (NULL," + Integer.parseInt(cedula) + "," + idEmpelado + ",to_date('" + fecha + "','DD/MM/YYYY')," + total + ")";
         System.out.println(insert);
         try {
             this.connection = Conexion.getConexion();
@@ -58,8 +57,8 @@ public class CotizacionDAO extends AbstractDao {
             r = this.statement.executeUpdate(insert);
             statement.close();
         } catch (SQLException ex) {
-            System.out.println("No se pudo realizar la consulta: "+ex.getMessage());
-            
+            System.out.println("No se pudo realizar la consulta: " + ex.getMessage());
+
         } finally {
             Conexion.desconectar();
         }
@@ -69,22 +68,21 @@ public class CotizacionDAO extends AbstractDao {
     public Object obtenerTotalPartes(String[] partes) {
         long total = 0;
         String id = "";
-        
+
         for (String parte : partes) {
-            id = id.concat(parte+",");
-        }   
-        id = id.substring(0, id.length()-1);
-        System.out.println("ID: "+id);
-        String consulta = " SELECT SUM(PRECIOPARTE) TOTAL FROM HISTORICOPRECIOPARTE WHERE IDPARTE IN("+id+")";
-      
+            id = id.concat(parte + ",");
+        }
+        id = id.substring(0, id.length() - 1);
+        System.out.println("ID: " + id);
+        String consulta = " SELECT SUM(PRECIOPARTE) TOTAL FROM HISTORICOPRECIOPARTE WHERE IDPARTE IN(" + id + ")";
+
         try {
             this.connection = Conexion.getConexion();
             this.statement = connection.createStatement();
             this.resultSet = statement.executeQuery(consulta);
 
-
             if (resultSet.next()) {
-                 total = resultSet.getInt("TOTAL");
+                total = resultSet.getInt("TOTAL");
             }
             statement.close();
         } catch (SQLException ex) {
@@ -96,20 +94,19 @@ public class CotizacionDAO extends AbstractDao {
         }
         return total;
     }
-    
+
     public Object obtenerTotalAuto(String vin) {
         long total = 0;
-             
-        String consulta = " SELECT PRECIO TOTAL FROM HISTORICOPRECIOSAUTO WHERE VIN = '"+vin+"'";
 
-        
+        String consulta = " SELECT PRECIO TOTAL FROM HISTORICOPRECIOSAUTO WHERE VIN = '" + vin + "'";
+
         try {
             this.connection = Conexion.getConexion();
             this.statement = connection.createStatement();
             this.resultSet = statement.executeQuery(consulta);
 
             if (resultSet.next()) {
-                 total = resultSet.getInt("TOTAL");
+                total = resultSet.getInt("TOTAL");
             }
             statement.close();
         } catch (SQLException ex) {
@@ -117,51 +114,51 @@ public class CotizacionDAO extends AbstractDao {
             return null;
         } finally {
             Conexion.desconectar();
-        }      
-        
+        }
+
         return total;
     }
-  
+
     public ArrayList<Map<String, Object>> buscarPorCedulaCliente(String cedula) {
         ArrayList<Map<String, Object>> cotizaciones = new ArrayList();
-        
-        String consulta =  ConsultasVenta.getBuscarCotizacionPorCedulaCliente(cedula);
-        
+
+        String consulta = ConsultasVenta.getBuscarCotizacionPorCedulaCliente(cedula);
+
         try {
             this.connection = Conexion.getConexion();
             this.statement = connection.createStatement();
             this.resultSet = statement.executeQuery(consulta);
-            
-            while(resultSet.next()){
+
+            while (resultSet.next()) {
                 Cliente cliente = new Cliente();
                 Empleado empleado = new Empleado();
                 Caracteristica caracteristca = new Caracteristica();
                 Cotizacion cotizacion = new Cotizacion();
-                
+
                 cotizacion.setIdCotizacion(resultSet.getInt(1));
                 cotizacion.setFechaExpedicion(resultSet.getString(2).substring(0, 10));
                 cotizacion.setTotal(resultSet.getInt(3));
-                
+
                 cliente.setNombre(resultSet.getString(4));
                 cliente.setApellido(resultSet.getString(5));
-                
+
                 empleado.setNombre(resultSet.getString(6));
                 empleado.setApellido(resultSet.getString(7));
 
                 caracteristca.setNombre(resultSet.getString(8));
-                
-                HashMap<String, Object> map = new CollectionsUtils.ConstMap<>();
+
+                HashMap<String, Object> map = new HashMap();
                 map.put("cotizacion", cotizacion);
                 map.put("cliente", cliente);
                 map.put("empleado", empleado);
                 map.put("caracteristca", caracteristca);
-                
+
                 cotizaciones.add(map);
             }
-            
+
             statement.close();
         } catch (SQLException ex) {
-            System.out.println("No se pudo realizar la consulta: "+ex.getMessage());
+            System.out.println("No se pudo realizar la consulta: " + ex.getMessage());
             return null;
         } finally {
             Conexion.desconectar();
@@ -169,49 +166,54 @@ public class CotizacionDAO extends AbstractDao {
 
         return cotizaciones;
     }
-    
-    public ArrayList<Map<String, Object>> getAllCotizacionById(int idcotizacion) {
-                ArrayList<Map<String, Object>> cotizaciones = new ArrayList();
-        ClienteDAO clienteDAO = new ClienteDAO();
-        String consulta =  ConsultasVenta.getCotizacionCompletaById(idcotizacion);
+
+    public Map<String, Object> getAllCotizacionById(int idcotizacion) {
         
+        HashMap<String, Object> map = new HashMap<>();
+        ArrayList<Map<String, Object>> cotizaciones = new ArrayList();
+
+        ClienteDAO clienteDAO = new ClienteDAO();
+        CaracteristicaDAO caracteristicaDAO = new CaracteristicaDAO();
+        TipoCaracteristicaDAO tipoCaracteristicaDAO = new TipoCaracteristicaDAO();
+
+        String consulta = ConsultasVenta.getCotizacionCompletaById(idcotizacion);
+        ArrayList<TipoCaracteristica> tipoCaracteristicas = tipoCaracteristicaDAO.cargarCaracteristicas();
         try {
             this.connection = Conexion.getConexion();
             this.statement = connection.createStatement();
             this.resultSet = statement.executeQuery(consulta);
-            
-            while(resultSet.next()){
+
+            while (resultSet.next()) {
                 Empleado empleado = new Empleado();
-                Caracteristica caracteristca = new Caracteristica();
                 Cotizacion cotizacion = new Cotizacion();
-                
+
                 cotizacion.setIdCotizacion(resultSet.getInt(1));
                 cotizacion.setFechaExpedicion(resultSet.getString(2).substring(0, 10));
                 cotizacion.setTotal(resultSet.getInt(3));
-                
-                empleado.setNombre(resultSet.getString(6));
-                empleado.setApellido(resultSet.getString(7));
-                
+
+                empleado.setNombre(resultSet.getString(5));
+                empleado.setApellido(resultSet.getString(6));
+
                 Cliente cliente = clienteDAO.buscarCliente(resultSet.getString(4));
-                
-                HashMap<String, Object> map = new CollectionsUtils.ConstMap<>();
+                ArrayList<Caracteristica> caracteristicas = caracteristicaDAO.obtenerCaracteristicas(resultSet.getString(7));
+
                 map.put("cotizacion", cotizacion);
                 map.put("cliente", cliente);
-                map.put("empleado", empleado);
-                map.put("caracteristca", caracteristca);
-                
-                cotizaciones.add(map);
+                map.put("empleados", empleado);
+                map.put("caracteristcas", caracteristicas);
+                map.put("tipoCaracteristicas", tipoCaracteristicas);
+
             }
-            
+
             statement.close();
         } catch (SQLException ex) {
-            System.out.println("No se pudo realizar la consulta: "+ex.getMessage());
+            System.out.println("No se pudo realizar la consulta: " + ex.getMessage());
             return null;
         } finally {
             Conexion.desconectar();
         }
 
-        return cotizaciones;
+        return map;
     }
 
 }

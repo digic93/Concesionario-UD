@@ -80,12 +80,12 @@ public class Cotizacion extends HttpServlet {
             if(respuesta == 1){
                 respuesta = procesoDAO.guardar(empleado.getIdEmpelado(),numCotizacion);
                 if(respuesta == 1){
-                    out.write("<h4>Total Costo Vehiculo: $ "+totalAuto+" COP Total Costo Partes: $ "+totalPartes+" COP</h4>");
-                    out.write("<h2>Total Cotizacion: $"+total+" COP</h2>");
+                    out.write("<h4 id=\"costoVehiculo\">Total Costo Vehiculo: COP $ "+totalAuto+"  Total Costo Partes: $ "+totalPartes+" COP</h4>");
+                    out.write("<h2 id=\"totalCotizacion\">Total Cotizacion: COP $"+total+" </h2>");
                     out.write("<br><br>");
-                    out.write("<input id=\"pdf\" type=\"button\" class=\"btn btn-success btn-xs\" value=\"Generar PDF\"/>");        
+                    //out.write("<input id=\"pdf\" type=\"button\" class=\"btn btn-success btn-xs\" value=\"Generar PDF\"/>");        
                     out.write("<br><br>");
-                    out.write("<br><br>");                   
+                                      
                 }else{//fallo en guardar proceso
                     out.write("n");
                 }   

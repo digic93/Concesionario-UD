@@ -96,7 +96,7 @@
 <center>
     <strong><p>Datos Vehículo</p></strong>
 
-    <table id="table" class="table" class="display" cellspacing="0" width="100%">
+    <table id="tableVehiculo" class="table" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>Tipo Caracteristica</th>
@@ -105,11 +105,6 @@
             </tr>
         </thead>
         <tbody id="bodyTableCaracteristica">
-            
-            
-            
-
-            <!--Imprimir los datos del cliente-->
         </tbody>
 
     </table>
@@ -125,41 +120,48 @@
         
 <center>
     <strong><p>Datos Partes</p></strong>
+    <table id="tablePartes" class="table" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+
+                <th>Número</th>
+                <th>Tipo Parte</th>
+                <th>Nombre Parte</th>
+                <th>Precio </th>                    
+                <th>Adicionar a la cotización </th> 
+
+            </tr>
+        </thead>
+
+        <tbody id="bodyTablePartes">
+        </tbody>
+
+    </table>
+    <input id="cotizar" type="button" class="btn btn-success btn-xs" value="Generar Cotización"/>
     
-    <form role="form" class="registration-form">
-
-        <table id="table" class="table" class="display" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    
-                    <th>Número</th>
-                    <th>Tipo Parte</th>
-                    <th>Nombre Parte</th>
-                    <th>Precio </th>                    
-                    <th>Adicionar a la cotización </th> 
-                    
-                </tr>
-            </thead>
-
-            <tbody id="bodyTablePartes">
-     
-
-
-
-            </tbody>
-
-        </table>
-        <input id="cotizar" type="button" class="btn btn-success btn-xs" value="Generar Cotización"/>
-    </form>
 </center>   
         
         <center id="total">
+            
+           
+            
                         
         </center>
+        <br>
+        <br>
+        <center>
+            <input id="pdf" type="button" class="btn btn-success btn-xs" value="Generar PDF"/>
+        </center>
+        
         
         <br>
         <br>
         <br>
+        <br>
+        <br>
+        <br>
+        
+        
 
 <script>
 
@@ -236,6 +238,63 @@ $(document).ready(function() {
             alert('No se puede iniciar la cotización');
           }
         });
+    });
+    
+    $("#pdf").click(function() {        
+        var doc = new jsPDF();
+        
+        var text = $('#bodyTable tr th:first').text();
+        console.log(text);
+        
+        var totalSuma = $('#costoVehiculo').text();
+        var total = $('#totalCotizacion').text();
+        
+        console.log(totalSuma +" "+total );
+        
+        doc.setFont("times");
+        doc.setFontType("italic");
+        doc.text(20, 20, 'Cotización Final N°: .');
+        doc.text(20,30,'Agente de Ventas: <%out.print(e.getNombre()+" "+e.getApellido()); %>');
+        doc.text(20, 40, 'Nombre Cliente: '+text);
+        doc.text(20, 50, 'Cédula Cliente: '+$("#cedula").val());
+        doc.text(20,60,'VIN Vehículo: '+ $("#vehiculo").val());
+        
+        doc.text(20,70,totalSuma);
+        doc.text(20,80,total);
+        
+        
+        var tableCaracteristicas = doc.autoTableHtmlToJson(document.getElementById("tableVehiculo"));
+        var tablePartes = doc.autoTableHtmlToJson(document.getElementById("tablePartes"));
+        doc.autoTable(tableCaracteristicas.columns, tableCaracteristicas.data, {
+            startY: 85,
+            styles: {
+              overflow: 'linebreak',
+              fontSize: 12,
+              rowHeight: 10,
+              columnWidth: 'wrap'
+            },
+            columnStyles: {
+              1: {columnWidth: 'auto'}
+            }
+        });
+        
+        doc.autoTable(tablePartes.columns, tablePartes.data, {
+            startY: 520,
+            styles: {
+              overflow: 'linebreak',
+              fontSize: 12,
+              rowHeight: 10,
+              columnWidth: 'wrap'
+            },
+            columnStyles: {
+              1: {columnWidth: 'auto'}
+            }
+        });
+        
+
+        
+        doc.save('Cotizacion.pdf');
+        
     });
     
     $("#cotizar").click(function() {     

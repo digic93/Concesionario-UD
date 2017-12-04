@@ -22,6 +22,7 @@
     var totalAcuerdo70 = 0;
     var totalPorcentajeAcuerdo30 = 0;
     var totalPorcentajeAcuerdo70 = 0;
+    var flagCreditoBanco = false;
 
     $(document).ready(function () {
         ModoBusquedaCotizacion = "cotizacionPorCCCliente";
@@ -50,12 +51,22 @@
     }
 
     function agregarAcuerdopago() {
+        var banco = $("#bancoCreditoAcuerdo option:selected").text();
+        if($("#metodoAcuerdo option:selected").val() == 4){
+            flagCreditoBanco = true;
+            $("#btnRegistrar").html('<span class="glyphicon glyphicon-check" aria-hidden="true"></span> Estudio Credito'); 
+        }
+        
+        if($("#metodoAcuerdo option:selected").val() == 1){
+            banco = "";
+        }
+        
         if (porcentajeAdd === 30) {
             if (totalPorcentajeAcuerdo30 == 100) {
                 alert("Porcentaje ya completado");
             } else {
                 var total = parseInt(cotizacionSuper.total) * 0.3 * parseInt($("#porcentajeAcuerdo").val()) / 100;
-                $("#acuerdos30").append("<tr><td>" + $("#porcentajeAcuerdo").val() + "%</td><td></td><td></td><td>$" + total + "</td></tr>");
+                $("#acuerdos30").append("<tr><td>" + $("#porcentajeAcuerdo").val() + "%</td><td>" + $("#metodoAcuerdo option:selected").text() + "</td><td>" + banco + "</td><td>$" + total + "</td></tr>");
                 totalAcuerdo30 += total;
                 totalPorcentajeAcuerdo30 += parseInt($("#porcentajeAcuerdo").val());
                 $("#totalAcuerdo30").html("$" + totalAcuerdo30);
@@ -66,7 +77,7 @@
                 alert("Porcentaje ya completado");
             } else {
                 var total = parseInt(cotizacionSuper.total) * 0.7 * parseInt($("#porcentajeAcuerdo").val()) / 100;
-                $("#acuerdos70").append("<tr><td>" + $("#porcentajeAcuerdo").val() + "%</td><td></td><td></td><td>$" + total + "</td></tr>");
+                $("#acuerdos70").append("<tr><td>" + $("#porcentajeAcuerdo").val() + "%</td><td>" + $("#metodoAcuerdo option:selected").text() + "</td><td>" + banco + "</td><td>$" + total + "</td></tr>");
                 totalAcuerdo70 += total;
                 totalPorcentajeAcuerdo70 += parseInt($("#porcentajeAcuerdo").val());
                 $("#totalAcuerdo70").html("$" + totalAcuerdo70);
@@ -168,7 +179,7 @@
             </div>
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">
-                    <button type="button" class="btn btn-primary btn-ls">
+                    <button id="btnRegistrar" type="button" class="btn btn-primary btn-ls">
                         <span class="glyphicon glyphicon-check" aria-hidden="true"></span> Separar Auto 
                     </button>
                 </div>
@@ -214,7 +225,7 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="selectbasic">Banco Aliado</label>
                             <div class="col-md-4">
-                                <select id="selectbasic" name="selectbasic" class="form-control">
+                                <select id="bancoCreditoAcuerdo" name="selectbasic" class="form-control">
                                     <option value="1">Banco Bogota</option>
                                     <option value="2">BanColombia</option>
                                 </select>

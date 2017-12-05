@@ -41,7 +41,7 @@ public class ProcesoDAO extends AbstractDao {
         Calendar calendar = Calendar.getInstance();
         String fecha = calendar.get(Calendar.DATE) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
         
-        String insert = "INSERT INTO PROCESO (IDPROCESO,IDTIPOPROCESO,IDEMPELADO,IDCOTIZACION,FECHAINICIOPROCESO,FECHAFINALIZACIONPROCESO) VALUES (null,1,"+idEmpelado+","+numCotizacion+",to_date('"+fecha+"','DD/MM/YYYY')"+",to_date('"+fecha+"','DD/MM/YYYY'))";
+        String insert = "INSERT INTO PROCESO (IDPROCESO,IDTIPOPROCESO,IDEMPELADO,IDCOTIZACION,FECHAINICIOPROCESO,FECHAFINALIZACIONPROCESO) VALUES (SEQUENCE_PROCESO.NEXTVAL,1,"+idEmpelado+","+numCotizacion+",to_date('"+fecha+"','DD/MM/YYYY')"+",to_date('"+fecha+"','DD/MM/YYYY'))";
         System.out.println(insert);
         try {
             this.connection = Conexion.getConexion();

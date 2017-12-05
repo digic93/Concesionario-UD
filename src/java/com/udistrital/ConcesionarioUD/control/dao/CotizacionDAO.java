@@ -50,7 +50,9 @@ public class CotizacionDAO extends AbstractDao {
         Calendar calendar = Calendar.getInstance();
         String fecha = calendar.get(Calendar.DATE) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
         int r = 0;
+
         String insert = "INSERT INTO COTIZACION (IDCOTIZACION,CEDULA,IDEMPELADO,FECHAEXPEDICION,TOTAL) VALUES (null,"+Integer.parseInt(cedula)+","+idEmpelado+",to_date('"+fecha+"','DD/MM/YYYY'),"+total+")";
+
         System.out.println(insert);
         try {
             this.connection = Conexion.getConexion();

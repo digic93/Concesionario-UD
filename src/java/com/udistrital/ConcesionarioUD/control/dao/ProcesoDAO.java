@@ -57,4 +57,27 @@ public class ProcesoDAO extends AbstractDao {
         return r;
     }
 
+    public int actualizarEstadoProceso(int idCotizacion,int idEmpleado) {
+        String []partes = {"Credito Aprobado","Acuerdo Pago Credito"};
+        Calendar calendar = Calendar.getInstance();
+        String fecha = calendar.get(Calendar.DATE) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
+        int r = 0;
+        for (String parte : partes) {
+            String insert = "INSERT INTO PROCESO (IDPROCESO,IDTIPOPROCESO,IDEMPELADO,IDCOTIZACION,FECHAINICIOPROCESO,FECHAFINALIZACIONPROCESO) VALUES (null,(SELECT IDTIPOPROCESO FROM TIPOPROCESO WHERE LOWER(ESTADOPROCESO) = LOWER('"+parte+"')),"+idEmpleado+","+idCotizacion+",to_date('"+fecha+"','DD/MM/YYYY'),null)";
+            System.out.println(insert);
+            try {
+                this.connection = Conexion.getConexion();
+                this.statement = connection.createStatement();
+                r = this.statement.executeUpdate(insert);
+                statement.close();
+            } catch (SQLException ex) {
+                System.out.println("No se pudo realizar la consulta: "+ex.getMessage());
+
+            } finally {
+                Conexion.desconectar();
+            }
+        }
+        return r;
+    }
+
 }

@@ -5,11 +5,9 @@
  */
 package com.udistrital.ConcesionarioUD.control.servlets.venta;
 
-import com.udistrital.ConcesionarioUD.control.dao.ProcesoDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Dell
+ * @author Santiag
  */
-@WebServlet(name = "EstudioCredito", urlPatterns = {"/venta/estudioCredito"},initParams = {
-    @WebInitParam(name = "cotizacion", value = "")})
-public class EstudioCredito extends HttpServlet {
+@WebServlet(name = "SeparaAuto", urlPatterns = {"/venta/separaAuto"})
+public class SeparaAuto extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,16 +37,17 @@ public class EstudioCredito extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet xxxxx</title>");
+            out.println("<title>Servlet SeparaAuto</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AcuerdoPago at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SeparaAuto at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-   /**
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
      * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
@@ -60,9 +58,7 @@ public class EstudioCredito extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                
-        
-        request.getRequestDispatcher("../Web/EstudioCreditoView.jsp").forward(request, response);
+        request.getRequestDispatcher("../Web/SepararAutoView.jsp").forward(request, response);
     }
 
     /**
@@ -77,20 +73,6 @@ public class EstudioCredito extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        ProcesoDAO procesoDAO = new ProcesoDAO();
- 
-        PrintWriter out = response.getWriter();
-        if(request.getParameter("cotizacion")!=null && request.getParameter("empleado")!=null){
-            int r = procesoDAO.actualizarEstadoProceso(Integer.parseInt(request.getParameter("cotizacion")),Integer.parseInt(request.getParameter("empleado")));
-            if(r==1){
-                out.write("Estados actualizados");
-            }else{
-                out.write("n");
-            }
-        }else{
-            
-        }
-//        
     }
 
     /**

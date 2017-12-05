@@ -19,9 +19,9 @@
                 <div class="well well-sm">
                     <div class="input-group">
                         <span class="input-group-addon" id="sizing-addon2">C.C</span>
-                        <input id="cedulaBusqueda" type="number" min="0" class="form-control" placeholder="Cedula Cliente" aria-describedby="sizing-addon2" >
+                        <input id="cedulaBusqueda" type="number" min="0" class="form-control" placeholder="Cédula Cliente" aria-describedby="sizing-addon2" >
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button"  onclick="buscar();">Bucar</button>
+                            <button class="btn btn-default" type="button"  onclick="buscar();">Buscar</button>
                         </span>
                     </div>
                 </div>

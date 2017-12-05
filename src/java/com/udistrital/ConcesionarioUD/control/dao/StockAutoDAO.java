@@ -35,4 +35,21 @@ public class StockAutoDAO  extends AbstractDao {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public void guardar(int numCotizacion, String vin) {        
+        
+        String insert = "INSERT INTO STOCKAUTO (IDSTOCKAUTO,IDFACTURA,IDDETALLEFACTURA,IDESTADOSTOCKAUTO,VIN,IDTIPOMOVIMIENTO,IDCOTIZACION,IDDETALLE) VALUES (null,null,null,1,'"+vin+"',1,"+numCotizacion+",null)";
+        System.out.println(insert);
+        try {
+            this.connection = Conexion.getConexion();
+            this.statement = connection.createStatement();
+            this.statement.executeUpdate(insert);
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("No se pudo realizar el insert: "+ex.getMessage());
+
+        } finally {
+            Conexion.desconectar();
+        }
+    }
+
 }

@@ -12,6 +12,7 @@ import com.udistrital.ConcesionarioUD.modelo.bean.Cliente;
 import com.udistrital.ConcesionarioUD.modelo.bean.Cotizacion;
 import com.udistrital.ConcesionarioUD.modelo.bean.Empleado;
 import com.udistrital.ConcesionarioUD.modelo.bean.TipoCaracteristica;
+import com.udistrital.ConcesionarioUD.modelo.bean.TipoProceso;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -49,7 +50,7 @@ public class CotizacionDAO extends AbstractDao {
         Calendar calendar = Calendar.getInstance();
         String fecha = calendar.get(Calendar.DATE) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
         int r = 0;
-        String insert = "INSERT INTO COTIZACION (IDCOTIZACION,CEDULA,IDEMPELADO,FECHAEXPEDICION,TOTAL) VALUES (NULL," + Integer.parseInt(cedula) + "," + idEmpelado + ",to_date('" + fecha + "','DD/MM/YYYY')," + total + ")";
+        String insert = "INSERT INTO COTIZACION (IDCOTIZACION,CEDULA,IDEMPELADO,FECHAEXPEDICION,TOTAL) VALUES (null,"+Integer.parseInt(cedula)+","+idEmpelado+",to_date('"+fecha+"','DD/MM/YYYY'),"+total+")";
         System.out.println(insert);
         try {
             this.connection = Conexion.getConexion();
@@ -217,7 +218,7 @@ public class CotizacionDAO extends AbstractDao {
     }
 
     public ArrayList<Map<String, Object>> cotizacionAprobarCreditoPorCCCliente(String cedula) {
-               ArrayList<Map<String, Object>> cotizaciones = new ArrayList();
+        ArrayList<Map<String, Object>> cotizaciones = new ArrayList();
 
         String consulta = ConsultasVenta.getBuscarcotizacionAprobarCreditoPorCCCliente(cedula);
 
@@ -284,5 +285,103 @@ public class CotizacionDAO extends AbstractDao {
             Conexion.desconectar();
         }
         return r;
+    }
+
+    public ArrayList<Map<String, Object>> cotizacionEstudioCreditoPorCCCliente(String cedula) {
+        ArrayList<Map<String, Object>> cotizaciones = new ArrayList();
+        String consulta = ConsultasVenta.getBuscarcotizacionEstudioCreditoPorCCCliente(cedula);
+
+        try {
+            this.connection = Conexion.getConexion();
+            this.statement = connection.createStatement();
+            this.resultSet = statement.executeQuery(consulta);
+
+            while (resultSet.next()) {
+                Cliente cliente = new Cliente();
+                Empleado empleado = new Empleado();
+                Caracteristica caracteristca = new Caracteristica();
+                Cotizacion cotizacion = new Cotizacion();
+                TipoProceso tipoProceso = new TipoProceso();
+
+                cotizacion.setIdCotizacion(resultSet.getInt(1));
+                cotizacion.setFechaExpedicion(resultSet.getString(2).substring(0, 10));
+                cotizacion.setTotal(resultSet.getInt(3));
+
+                cliente.setNombre(resultSet.getString(4));
+                cliente.setApellido(resultSet.getString(5));
+
+                empleado.setNombre(resultSet.getString(6));
+                empleado.setApellido(resultSet.getString(7));
+
+                caracteristca.setNombre(resultSet.getString(8));
+                tipoProceso.setIdTipoProceso(Integer.parseInt(resultSet.getString(9)));
+                tipoProceso.setEstadoProceso("Estudio Credito");
+                
+
+                HashMap<String, Object> map = new HashMap();
+                map.put("cotizacion", cotizacion);
+                map.put("cliente", cliente);
+                map.put("empleado", empleado);
+                map.put("caracteristca", caracteristca);
+                map.put("tipo",tipoProceso);
+                cotizaciones.add(map);
+            }
+
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("No se pudo realizar la consulta: " + ex.getMessage());
+            return null;
+        } finally {
+            Conexion.desconectar();
+        }
+
+        return cotizaciones;
+    }
+
+    public ArrayList<Map<String, Object>> cotizacionSepararAutoPorCCCliente(String cedula) {
+        ArrayList<Map<String, Object>> cotizaciones = new ArrayList();
+        String consulta = ConsultasVenta.getBuscarcotizacionSepararAutoPorCCCliente(cedula);
+
+        try {
+            this.connection = Conexion.getConexion();
+            this.statement = connection.createStatement();
+            this.resultSet = statement.executeQuery(consulta);
+
+            while (resultSet.next()) {
+                Cliente cliente = new Cliente();
+                Empleado empleado = new Empleado();
+                Caracteristica caracteristca = new Caracteristica();
+                Cotizacion cotizacion = new Cotizacion();
+
+                cotizacion.setIdCotizacion(resultSet.getInt(1));
+                cotizacion.setFechaExpedicion(resultSet.getString(2).substring(0, 10));
+                cotizacion.setTotal(resultSet.getInt(3));
+
+                cliente.setNombre(resultSet.getString(4));
+                cliente.setApellido(resultSet.getString(5));
+
+                empleado.setNombre(resultSet.getString(6));
+                empleado.setApellido(resultSet.getString(7));
+
+                caracteristca.setNombre(resultSet.getString(8));
+
+                HashMap<String, Object> map = new HashMap();
+                map.put("cotizacion", cotizacion);
+                map.put("cliente", cliente);
+                map.put("empleado", empleado);
+                map.put("caracteristca", caracteristca);
+
+                cotizaciones.add(map);
+            }
+
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("No se pudo realizar la consulta: " + ex.getMessage());
+            return null;
+        } finally {
+            Conexion.desconectar();
+        }
+
+        return cotizaciones;
     }
 }

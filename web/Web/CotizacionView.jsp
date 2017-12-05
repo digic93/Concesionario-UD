@@ -253,7 +253,7 @@ $(document).ready(function() {
         
         doc.setFont("times");
         doc.setFontType("italic");
-        doc.text(20, 20, 'Cotización Final N°: .');
+        doc.text(20, 20, 'Cotización N°:'+$("#numCotizacion").text());
         doc.text(20,30,'Agente de Ventas: <%out.print(e.getNombre()+" "+e.getApellido()); %>');
         doc.text(20, 40, 'Nombre Cliente: '+text);
         doc.text(20, 50, 'Cédula Cliente: '+$("#cedula").val());

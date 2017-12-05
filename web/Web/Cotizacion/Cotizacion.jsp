@@ -18,7 +18,7 @@
                     <div class="thumbnail">
                         <div class="caption">
                             <h2 id="nombreCliente"></h2>
-                            <h4>info Cliente:</h4>
+                            <h4>Info Cliente:</h4>
                             <p>
                                 <strong>Cedula: </strong><span id="cedulaCliente"></span><br>
                                 <strong>Direccion: </strong><span id="diereccionCliente"></span><br>
@@ -34,11 +34,12 @@
                     <div class="col-md-6">
                         <div class="thumbnail">
                             <div class="caption">
-                                <h4>info Vendedor:</h4>
+                                <h4>Info Vendedor:</h4>
                                 <p>
+                                    <strong hidden>Id: </strong><span id="idempleado" hidden></span><br>
                                     <strong>Nombre: </strong><span id="nombreVendedor"></span><br>
                                     <strong>Apellido: </strong><span id="apellidoVendedor"></span><br>
-                                    <strong>Area: </strong><span>Ventas</span>
+                                    <strong>Área: </strong><span>Ventas</span>
                                 </p>
                             </div>
                         </div>
@@ -46,7 +47,7 @@
                     <div class="col-md-6">
                         <div class="thumbnail">
                             <div class="caption">
-                                <h4>info Cotizacion:</h4>
+                                <h4>Info Cotizacion:</h4>
                                 <p>
                                     <strong>Estado: </strong><span id="estadoCotizacion"></span><br>
                                     <strong>Fecha Expedicion: </strong><span id="fechaExpedicionCotizacion"></span><br>
@@ -59,7 +60,7 @@
             </div>
             <div class="row">
                 <div class="col-md-5 col-md-offset-1">
-                    <h3>Especificaciones Vehiculo</h3>
+                    <h3>Especificaciones Vehículo</h3>
                     <hr>
                     <table class="table table-striped" cellspacing="0" width="100%">
                         <thead>
@@ -90,12 +91,14 @@
             type: "GET",
             url: '${pageContext.request.contextPath}/venta/cotizacion?idcotizacion=' + idcotizacion,
             success: function (cotizacion) {
+                console.log(cotizacion);
                 cotizacionSuper = cotizacion.cotizacion;
                 $("#nombreCliente").empty();
                 $("#cedulaCliente").empty();
                 $("#diereccionCliente").empty();
                 $("#fechaNacimientoCliente").empty();
 
+                
                 $("#nombreCliente").html(cotizacion.cliente.nombre + " " + cotizacion.cliente.apellido);
                 $("#cedulaCliente").html(cotizacion.cliente.cedula);
                 $("#diereccionCliente").html(cotizacion.cliente.direccionResidencia);
@@ -113,8 +116,20 @@
                 $("#estadoCotizacion").empty();
                 $("#estadoCotizacion").empty();
                 $("#totalCotizacion").empty();
+                
+                $("#estadoCotizacion").html("Cotizacion"); 
+                if(ModoBusquedaCotizacion=='cotizacionEstudioCreditoPorCCCliente'){
+                    $("#estadoCotizacion").html("Estudio Credito");
+                }else{
+                    if(ModoBusquedaCotizacion=='cotizacionAprobarCreditoPorCCCliente'){
+                       $("#estadoCotizacion").html("Cotizacion"); 
+                    }
+                    if(ModoBusquedaCotizacion=='cotizacionSepararAutoPorCCCliente'){
+                        $("#estadoCotizacion").html("Acuerdo Pago"); 
+                    }
+                }
 
-                $("#estadoCotizacion").html("cotizacion");
+                
                 $("#fechaExpedicionCotizacion").html(cotizacion.cotizacion.fechaExpedicion);
                 $("#totalCotizacion").html(cotizacion.cotizacion.total);
 

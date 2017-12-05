@@ -10,6 +10,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.udistrital.ConcesionarioUD.control.dao.AcuerdoPagoDAO;
+import com.udistrital.ConcesionarioUD.control.dao.ProcesoDAO;
+import com.udistrital.ConcesionarioUD.modelo.bean.Empleado;
 import com.udistrital.ConcesionarioUD.modelo.bean.ModalidadPago;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -55,7 +57,7 @@ public class AcuerdoPago extends HttpServlet {
         int idModalidad;
         int porcentaje;
         boolean flagAcurdo = false;
-        
+
         AcuerdoPagoDAO acuedoPagoDAO = new AcuerdoPagoDAO();
         com.udistrital.ConcesionarioUD.modelo.bean.AcuerdoPago acuerdo;
         String data = request.getParameter("data");
@@ -77,7 +79,7 @@ public class AcuerdoPago extends HttpServlet {
             acuerdo.setPorcentaje(porcentaje);
             if (idModalidad != 1) {
                 acuerdo.setIdBanco(Integer.parseInt(acuerdoObj.get("banco").getAsString()));
-            }else if(idModalidad == 4){
+            } else if (idModalidad == 4) {
                 flagAcurdo = true;
             }
 
@@ -91,14 +93,14 @@ public class AcuerdoPago extends HttpServlet {
 
             acuerdo.setIdCotizacion(idCotizacion);
 
-            idModalidad = Integer.parseInt(acuerdoObj.get("metodoAcuerdo").toString());
-            porcentaje = (int) (Integer.parseInt(acuerdoObj.get("porcentaje").toString()) * 0.7);
+            idModalidad = Integer.parseInt(acuerdoObj.get("metodoAcuerdo").getAsString());
+            porcentaje = (int) (Integer.parseInt(acuerdoObj.get("porcentaje").getAsString()) * 0.7);
 
             acuerdo.setIdModalidad(idModalidad);
             acuerdo.setPorcentaje(porcentaje);
             if (idModalidad != 1) {
                 acuerdo.setIdBanco(Integer.parseInt(acuerdoObj.get("banco").toString()));
-            }else if(idModalidad == 4){
+            } else if (idModalidad == 4) {
                 flagAcurdo = true;
             }
 
@@ -106,11 +108,19 @@ public class AcuerdoPago extends HttpServlet {
         }
 
         /// validar
+        ProcesoDAO procesoDAO = new ProcesoDAO();
+        Empleado empleado = (Empleado) request.getSession().getAttribute("empleado");
+
         if (flagAcurdo) {
             //proceso tiene que se estudio credito 
+            procesoDAO.actualizarEstadoProcesoEstudioCredito(idCotizacion, empleado.getIdEmpelado());
+            response.sendRedirect("./venta/estudioCredito");
         } else {
-            //proceso tiene que se estudio credito 
+            //proceso tiene que se acuerdo pago 
+            procesoDAO.actualizarEstadoProcesoAcuerdoPago(idCotizacion, empleado.getIdEmpelado());
+            response.sendRedirect("./venta/separaAuto");
         }
+
     }
 
     /**

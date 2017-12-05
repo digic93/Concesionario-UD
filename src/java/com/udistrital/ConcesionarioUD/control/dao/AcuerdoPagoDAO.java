@@ -30,22 +30,22 @@ public class AcuerdoPagoDAO extends AbstractDao {
         } else {
            idBanco =  acuerdo.getIdBanco() + "";
         }
-        String insert = "INSERT INTO ACUERDOPAGO(IDCOTIZACION,IDACUERDOPAGO, IDBANCO, IDMODALIDAD, PORCENTAJE, SEPARACION) VALUES ('" + acuerdo.getIdCotizacion() + "', null, " + idBanco + ", " + acuerdo.getIdModalidad() + ", " + acuerdo.getPorcentaje() + ", '" + acuerdo.getSeparacion() + "')";
+        String insert = "INSERT INTO ACUERDOPAGO(IDCOTIZACION,IDACUERDOPAGO, IDBANCO, IDMODALIDAD, PORCENTAJE, SEPARACION) VALUES (" + acuerdo.getIdCotizacion() + ", null, " + idBanco + ", " + acuerdo.getIdModalidad() + ", " + acuerdo.getPorcentaje() + ", " + ((acuerdo.getSeparacion())?1:0) + ")";
 
 //        System.out.println(insert);
         try {
             this.connection = Conexion.getConexion();
             this.statement = connection.createStatement();
-//            r = this.statement.executeUpdate(insert);
+            this.statement.executeUpdate(insert);
             statement.close();
         } catch (SQLException ex) {
             System.out.println("No se pudo realizar la consulta: " + ex.getMessage());
-
+            return false;
         } finally {
             Conexion.desconectar();
         }
 
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return true;
 
     }
 

@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Concecionario UD</title>
+        <title>Concesionario UD</title>
 
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Web/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Web/css/bootstrap-theme.min.css">
@@ -26,7 +26,7 @@
         <nav class="navbar-inverse navbar-default navbar-static-top">
             <div class="container">
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <p class="navbar-text"><span class="glyphicon glyphicon-road" aria-hidden="true"></span> Concecionario UD</p>
+                    <p class="navbar-text"><span class="glyphicon glyphicon-road" aria-hidden="true"></span> Concesionario UD</p>
                     <p id="horaSistema" class="navbar-text"></p>
                     <%if (request.getRequestURI().equals("/Concesionario_UD/Web/LoginView.jsp")) {%>        
                     <ul class="nav navbar-nav navbar-right">
@@ -66,9 +66,9 @@
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">
                     <div class="starter text-center">
-                        <h1><span class="glyphicon glyphicon-road" aria-hidden="true"></span> Concecionario UD</h1>
+                        <h1><span class="glyphicon glyphicon-road" aria-hidden="true"></span> Concesionario UD</h1>
                         <%if (session.getAttribute("empleado") == null) {%>
-                        <p class="lead">Especicalistas en la venta de Vehiculos nuevos.</p>
+                        <p class="lead">Especicalistas en la venta de Vehículos nuevos.</p>
                         <%}%>
                     </div>
                     <hr>

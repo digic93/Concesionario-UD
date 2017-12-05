@@ -66,6 +66,7 @@ public class BuquedaVentas extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String result;
+        System.out.println("Tipo Busqueda: "+request.getParameter("busqueda"));
         switch(request.getParameter("busqueda")){
             case "cotizacionPorCCCliente":
                 result = cotizacionPorCCCliente(request.getParameter("valor"));
@@ -82,6 +83,22 @@ public class BuquedaVentas extends HttpServlet {
                 //new Gson().toJson()
                 response.getWriter().write(result);
                 break;
+            case "cotizacionEstudioCreditoPorCCCliente":
+                
+                result = cotizacionEstudioCreditoPorCCCliente(request.getParameter("valor"));                
+                System.out.println(result);
+                response.setContentType("application/json");
+                //new Gson().toJson()
+                response.getWriter().write(result);
+                break;
+            
+            case "cotizacionSepararAutoPorCCCliente":
+                result = cotizacionSepararAutoPorCCCliente(request.getParameter("valor"));                
+                response.setContentType("application/json");
+                //new Gson().toJson()
+                response.getWriter().write(result);
+                break;
+                
             default:
                 //response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
@@ -119,6 +136,18 @@ public class BuquedaVentas extends HttpServlet {
     private String cotizacionAprobarCreditoPorCCCliente(String cedulaCliente) {
         CotizacionDAO cotizacionDAO = new CotizacionDAO();
         ArrayList<Map<String, Object>> cotizaciones = cotizacionDAO.cotizacionAprobarCreditoPorCCCliente(cedulaCliente);
+        return new Gson().toJson(cotizaciones);
+    }
+    
+    private String cotizacionEstudioCreditoPorCCCliente(String cedulaCliente) {
+        CotizacionDAO cotizacionDAO = new CotizacionDAO();
+        ArrayList<Map<String, Object>> cotizaciones = cotizacionDAO.cotizacionEstudioCreditoPorCCCliente(cedulaCliente);
+        return new Gson().toJson(cotizaciones);
+    }
+
+    private String cotizacionSepararAutoPorCCCliente(String cedulaCliente) {
+        CotizacionDAO cotizacionDAO = new CotizacionDAO();
+        ArrayList<Map<String, Object>> cotizaciones = cotizacionDAO.cotizacionSepararAutoPorCCCliente(cedulaCliente);
         return new Gson().toJson(cotizaciones);
     }
 

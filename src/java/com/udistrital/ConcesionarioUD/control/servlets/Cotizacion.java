@@ -6,9 +6,11 @@
 package com.udistrital.ConcesionarioUD.control.servlets;
 
 import com.udistrital.ConcesionarioUD.control.dao.CotizacionDAO;
+import com.udistrital.ConcesionarioUD.control.dao.DetalleCotizacionDAO;
 import com.udistrital.ConcesionarioUD.control.dao.EmpleadoDAO;
 import com.udistrital.ConcesionarioUD.control.dao.ParteAutoDAO;
 import com.udistrital.ConcesionarioUD.control.dao.ProcesoDAO;
+import com.udistrital.ConcesionarioUD.control.dao.StockAutoDAO;
 import com.udistrital.ConcesionarioUD.modelo.bean.Empleado;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -63,27 +65,31 @@ public class Cotizacion extends HttpServlet {
         Empleado empleado = (Empleado)sesion.getAttribute("empleado");
         
         CotizacionDAO cotizacionDAO = new CotizacionDAO();
-        EmpleadoDAO empleadoDAO = new EmpleadoDAO();
+        
         ProcesoDAO procesoDAO = new ProcesoDAO();
-        ParteAutoDAO parteAutoDAO = new ParteAutoDAO();
+        
+        DetalleCotizacionDAO detCotizacionDAO = new DetalleCotizacionDAO();
+        StockAutoDAO stockautoDAO = new StockAutoDAO();
         
         long totalPartes = (Long)cotizacionDAO.obtenerTotalPartes(partes);
         long totalAuto = (Long)cotizacionDAO.obtenerTotalAuto(vin);
         long total = totalPartes + totalAuto;
         
-        int respuesta = cotizacionDAO.guardarCotizacion(cedula,empleado.getIdEmpelado(),total);      
-             
+        int respuesta = cotizacionDAO.guardarCotizacion(cedula,empleado.getIdEmpelado(),total);
         
         if(respuesta==1){//cotizacion registrada -> se guarda el proceso se guarda precios
             int numCotizacion = cotizacionDAO.obtenerCotizacion();
-            respuesta = parteAutoDAO.guardar(partes,vin);
+            
+            respuesta = detCotizacionDAO.guardar(numCotizacion,partes,vin);
+            //respuesta = parteAutoDAO.guardar(partes,vin);
             if(respuesta == 1){
+                stockautoDAO.guardar(numCotizacion,vin);
                 respuesta = procesoDAO.guardar(empleado.getIdEmpelado(),numCotizacion);
                 if(respuesta == 1){
+                    out.write("<p id=\"numCotizacion\" hidden>"+numCotizacion+"<p>");
                     out.write("<h4 id=\"costoVehiculo\">Total Costo Vehiculo: COP $ "+totalAuto+"  Total Costo Partes: $ "+totalPartes+" COP</h4>");
                     out.write("<h2 id=\"totalCotizacion\">Total Cotizacion: COP $"+total+" </h2>");
-                    out.write("<br><br>");
-                    //out.write("<input id=\"pdf\" type=\"button\" class=\"btn btn-success btn-xs\" value=\"Generar PDF\"/>");        
+                    out.write("<br><br>");                    
                     out.write("<br><br>");
                                       
                 }else{//fallo en guardar proceso
@@ -111,5 +117,7 @@ public class Cotizacion extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+  
 
 }

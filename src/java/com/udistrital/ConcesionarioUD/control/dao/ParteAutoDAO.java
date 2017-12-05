@@ -42,7 +42,8 @@ public class ParteAutoDAO extends AbstractDao {
         int r = 0;
         
         for (String parte : partes) {
-            String insert = "INSERT INTO PARTEAUTO (IDSEQUENCE,IDPARTEAUTO,VIN,PRECIO) VALUES (SEQUENCE_HISTORICOPAGOS.NEXTVAL,"+Integer.parseInt(parte)+",'"+vin+"',(SELECT PRECIOPARTE FROM HISTORICOPRECIOPARTE WHERE IDPARTE="+Integer.parseInt(parte)+"))";
+            String insert = "INSERT INTO PARTEAUTO (IDSEQUENCE,IDPARTEAUTO,VIN,PRECIO) VALUES (CONCESIONARIOUD.SEQUENCE_PARTEAUTO.NEXTVAL,"+Integer.parseInt(parte)+",'"+vin+"',(SELECT PRECIOPARTE FROM HISTORICOPRECIOPARTE WHERE IDPARTE="+Integer.parseInt(parte)+"))";
+
             System.out.println(insert);
             try {
                 this.connection = Conexion.getConexion();

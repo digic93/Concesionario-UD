@@ -16,8 +16,8 @@ public class Conexion {
 
     private static Connection connetion = null;
     private static final String rulbd = "jdbc:oracle:thin:@localhost:1521:XE";
-    private static final String user = "bases11";
-    private static final String password = "bases11";
+    private static final String user = "CONCESIONARIOUD";
+    private static final String password = "rootPWUD";
 
     public static Connection getConexion(){
         if (connetion == null) {

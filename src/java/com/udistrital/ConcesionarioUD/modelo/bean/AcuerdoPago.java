@@ -16,6 +16,8 @@ public class AcuerdoPago {
     private int idModalidad;
     private int idGrupoFinanciero;
     private int idTarjeta;
+    private int porcentaje;
+    private boolean separacion;
 
     public int getIdCotizacion() {
         return idCotizacion;
@@ -64,6 +66,22 @@ public class AcuerdoPago {
     public void setIdTarjeta(int idTarjeta) {
         this.idTarjeta = idTarjeta;
     }
+
+    public int getPorcentaje() {
+        return porcentaje;
+    }
+
+    public void setPorcentaje(int porcentaje) {
+        this.porcentaje = porcentaje;
+    }
+
+    public boolean getSeparacion() {
+        return separacion;
+    }
+
+    public void setSeparacion(boolean separacion) {
+        this.separacion = separacion;
+    }  
     
     
 }

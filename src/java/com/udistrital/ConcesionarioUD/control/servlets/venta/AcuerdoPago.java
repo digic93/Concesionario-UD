@@ -5,6 +5,12 @@
  */
 package com.udistrital.ConcesionarioUD.control.servlets.venta;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.udistrital.ConcesionarioUD.control.dao.AcuerdoPagoDAO;
+import com.udistrital.ConcesionarioUD.modelo.bean.ModalidadPago;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -20,33 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "AcuerdoPago", urlPatterns = {"/venta/acuerdoPago"})
 public class AcuerdoPago extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet xxxxx</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AcuerdoPago at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -72,7 +51,66 @@ public class AcuerdoPago extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        int idModalidad;
+        int porcentaje;
+        boolean flagAcurdo = false;
+        
+        AcuerdoPagoDAO acuedoPagoDAO = new AcuerdoPagoDAO();
+        com.udistrital.ConcesionarioUD.modelo.bean.AcuerdoPago acuerdo;
+        String data = request.getParameter("data");
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject jobject = jelement.getAsJsonObject();
+        int idCotizacion = Integer.parseInt(jobject.get("idcotizacion").toString());
+
+        JsonArray Acuerdos30 = jobject.getAsJsonArray("acuerdos30");
+        for (JsonElement acuerdoElemnt : Acuerdos30) {
+            JsonObject acuerdoObj = acuerdoElemnt.getAsJsonObject();
+            acuerdo = new com.udistrital.ConcesionarioUD.modelo.bean.AcuerdoPago();
+
+            acuerdo.setIdCotizacion(idCotizacion);
+
+            idModalidad = Integer.parseInt(acuerdoObj.get("metodoAcuerdo").getAsString());
+            porcentaje = (int) (Integer.parseInt(acuerdoObj.get("porcentaje").getAsString()) * 0.3);
+
+            acuerdo.setIdModalidad(idModalidad);
+            acuerdo.setPorcentaje(porcentaje);
+            if (idModalidad != 1) {
+                acuerdo.setIdBanco(Integer.parseInt(acuerdoObj.get("banco").getAsString()));
+            }else if(idModalidad == 4){
+                flagAcurdo = true;
+            }
+
+            acuedoPagoDAO.crear(acuerdo);
+        }
+
+        JsonArray Acuerdos70 = jobject.getAsJsonArray("acuerdos70");
+        for (JsonElement acuerdoElemnt : Acuerdos70) {
+            JsonObject acuerdoObj = acuerdoElemnt.getAsJsonObject();
+            acuerdo = new com.udistrital.ConcesionarioUD.modelo.bean.AcuerdoPago();
+
+            acuerdo.setIdCotizacion(idCotizacion);
+
+            idModalidad = Integer.parseInt(acuerdoObj.get("metodoAcuerdo").toString());
+            porcentaje = (int) (Integer.parseInt(acuerdoObj.get("porcentaje").toString()) * 0.7);
+
+            acuerdo.setIdModalidad(idModalidad);
+            acuerdo.setPorcentaje(porcentaje);
+            if (idModalidad != 1) {
+                acuerdo.setIdBanco(Integer.parseInt(acuerdoObj.get("banco").toString()));
+            }else if(idModalidad == 4){
+                flagAcurdo = true;
+            }
+
+            acuedoPagoDAO.crear(acuerdo);
+        }
+
+        /// validar
+        if (flagAcurdo) {
+            //proceso tiene que se estudio credito 
+        } else {
+            //proceso tiene que se estudio credito 
+        }
     }
 
     /**

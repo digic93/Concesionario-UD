@@ -14,6 +14,7 @@
     var cotizacionSuper;
 
     var acuerdos = {
+        idcotizacion : 0,
         acuerdos30: [],
         acuerdos70: []
     };
@@ -30,6 +31,7 @@
     });
 
     clickOnCotizacion = function (idCotizacion) {
+        acuerdos.idcotizacion = idCotizacion;
         CargarCotizacionPorId(idCotizacion);
     }
 
@@ -52,15 +54,15 @@
 
     function agregarAcuerdopago() {
         var banco = $("#bancoCreditoAcuerdo option:selected").text();
-        if($("#metodoAcuerdo option:selected").val() == 4){
+        if ($("#metodoAcuerdo option:selected").val() == 4) {
             flagCreditoBanco = true;
-            $("#btnRegistrar").html('<span class="glyphicon glyphicon-check" aria-hidden="true"></span> Estudio Credito'); 
+            $("#btnRegistrar").html('<span class="glyphicon glyphicon-check" aria-hidden="true"></span> Estudio Credito');
         }
-        
-        if($("#metodoAcuerdo option:selected").val() == 1){
+
+        if ($("#metodoAcuerdo option:selected").val() == 1) {
             banco = "";
         }
-        
+
         if (porcentajeAdd === 30) {
             if (totalPorcentajeAcuerdo30 == 100) {
                 alert("Porcentaje ya completado");
@@ -71,6 +73,12 @@
                 totalPorcentajeAcuerdo30 += parseInt($("#porcentajeAcuerdo").val());
                 $("#totalAcuerdo30").html("$" + totalAcuerdo30);
                 $("#totalPorcentajeAcuerdo30").html(totalPorcentajeAcuerdo30 + "%");
+
+                acuerdos.acuerdos30.push({
+                    porcentaje: $("#porcentajeAcuerdo").val(),
+                    banco: $("#bancoCreditoAcuerdo option:selected").val(),
+                    metodoAcuerdo: $("#metodoAcuerdo option:selected").val()
+                });
             }
         } else {
             if (totalPorcentajeAcuerdo70 == 100) {
@@ -82,6 +90,12 @@
                 totalPorcentajeAcuerdo70 += parseInt($("#porcentajeAcuerdo").val());
                 $("#totalAcuerdo70").html("$" + totalAcuerdo70);
                 $("#totalPorcentajeAcuerdo70").html(totalPorcentajeAcuerdo70 + "%");
+
+                acuerdos.acuerdos70.push({
+                    porcentaje: $("#porcentajeAcuerdo").val(),
+                    banco: $("#bancoCreditoAcuerdo option:selected").val(),
+                    metodoAcuerdo: $("#metodoAcuerdo option:selected").val()
+                });
             }
         }
 
@@ -106,6 +120,22 @@
         total = total * valor / 100;
 
         $("#valorPagar").val("$" + total);
+    }
+
+    function registrarAcuerdos() {
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.request.contextPath}/venta/acuerdoPago",
+            data: {
+                data: JSON.stringify(acuerdos)
+            },
+            success: function (result) {
+                alert('Registrado con exito!');
+            },
+            error: function (result) {
+                alert('Error al registrar acuerdos de pago.');
+            }
+        });
     }
 </script>
 <div class="panel panel-default">
@@ -179,7 +209,7 @@
             </div>
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">
-                    <button id="btnRegistrar" type="button" class="btn btn-primary btn-ls">
+                    <button id="btnRegistrar" type="button" class="btn btn-primary btn-ls" onclick="registrarAcuerdos();">
                         <span class="glyphicon glyphicon-check" aria-hidden="true"></span> Separar Auto 
                     </button>
                 </div>

@@ -16,8 +16,8 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Web/DataTables/media/css/jquery.dataTables.css">
 
         <!--JavaScripts -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.2/jspdf.plugin.autotable.js"></script>
+        <script src="${pageContext.request.contextPath}/Web/js/jspdf.debug.js"></script>
+        <script src="${pageContext.request.contextPath}/Web/js/jspdf.plugin.autotable.js"></script>
         <script src="${pageContext.request.contextPath}/Web/js/jquery-3.2.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/Web/js/bootstrap.min.js"></script>
         <script type="text/javascript" charset="utf8" src="${pageContext.request.contextPath}/Web/DataTables/media/js/jquery.dataTables.js"></script>
